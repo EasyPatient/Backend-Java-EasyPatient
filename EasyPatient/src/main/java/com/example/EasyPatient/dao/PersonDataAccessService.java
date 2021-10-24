@@ -18,7 +18,7 @@ public class PersonDataAccessService implements PersonDao {
 	@Override
 	public int insertPerson(UUID id, Person person) {
 		DB.add(new Person(id, person.getName(), person.getAge(), person.getBedId(), 
-				person.getArrivedAt(), person.getCreatedAt()));
+				person.getArrivedAt()));
 		return 1;
 	}
 
@@ -47,8 +47,7 @@ public class PersonDataAccessService implements PersonDao {
 								person.getName(), 
 								person.getAge(), 
 								person.getBedId(), 
-								person.getArrivedAt(), 
-								person.getCreatedAt()));
+								person.getArrivedAt()));
 						return 1;
 					}
 					return 0;

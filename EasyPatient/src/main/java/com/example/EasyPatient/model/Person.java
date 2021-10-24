@@ -2,6 +2,8 @@ package com.example.EasyPatient.model;
 
 import java.sql.Date;
 import java.util.UUID;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
 
@@ -17,21 +19,22 @@ public class Person {
 	private int age;
 	private UUID bedId;
 	private final Date arrivedAt;
-	private final Date createdAt;
-	private Date updatedAt;
+	private final LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 	
 	public Person(@JsonProperty("id") UUID id, 
 			@JsonProperty("name") String name, 
 			@JsonProperty("age") int age, 
 			@JsonProperty("bedId") UUID bedId, 
-			@JsonProperty("arrivedAt") Date arrivedAt, 
-			@JsonProperty("createdAt") Date createdAt) {
+			@JsonProperty("arrivedAt") Date arrivedAt) {
+		LocalDateTime presentDate = LocalDateTime.now();		
+		
 		this.id = id;
 		this.name = name;
 		this.age = age;
 		this.bedId = bedId;
 		this.arrivedAt = arrivedAt;
-		this.createdAt = createdAt;
+		this.createdAt = presentDate;
 		this.updatedAt = createdAt;
 	}
 	
@@ -55,11 +58,11 @@ public class Person {
 		return this.arrivedAt;
 	}
 	
-	public Date getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return this.createdAt;
 	}
 	
-	public Date getUpdatedAt() {
+	public LocalDateTime getUpdatedAt() {
 		return this.updatedAt;
 	}
 	
@@ -71,7 +74,7 @@ public class Person {
 		this.bedId = bedId;
 	}
 	
-	public void setUpdatedAt(Date updatedAt) {
+	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 	
