@@ -3,12 +3,17 @@ package com.example.EasyPatient.model;
 import java.sql.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Person {
 	
 	private final UUID id;
+	
+	@NotBlank
 	private final String name;
+	
 	private int age;
 	private UUID bedId;
 	private final Date arrivedAt;

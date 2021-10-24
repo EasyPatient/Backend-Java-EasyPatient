@@ -1,17 +1,17 @@
 package com.example.EasyPatient.dao;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
 import com.example.EasyPatient.model.Person;
 
-@Repository("personDao")
-public class PersonDataAccessService implements PersonDao {
+@Repository("postgres")
+public class PersonDataBaseAccessService implements PersonDao {
 
 	private static List<Person> DB = new ArrayList<>();
 	
@@ -62,6 +62,5 @@ public class PersonDataAccessService implements PersonDao {
 				.filter(person -> person.getId().equals(id))
 				.findFirst();
 	}
-
 
 }
