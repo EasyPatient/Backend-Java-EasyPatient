@@ -1,22 +1,27 @@
 package com.easypatient.easypatient.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Person {
     private final UUID id;
-
     @NotBlank
     private final String name;
-
-    private int age;
-    private UUID bedId;
     private final Date arrivedAt;
     private final LocalDateTime createdAt;
+    private int age;
+    private UUID bedId;
     private LocalDateTime updatedAt;
 
     public Person(@JsonProperty("id") UUID id,
@@ -35,43 +40,4 @@ public class Person {
         this.updatedAt = createdAt;
     }
 
-    public UUID getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public int getAge() {
-        return this.age;
-    }
-
-    public UUID getBedId() {
-        return this.bedId;
-    }
-
-    public Date getArrivedAt() {
-        return this.arrivedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return this.updatedAt;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public void setBedId(UUID bedId) {
-        this.bedId = bedId;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

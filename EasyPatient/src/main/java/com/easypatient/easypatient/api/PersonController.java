@@ -3,7 +3,6 @@ package com.easypatient.easypatient.api;
 import com.easypatient.easypatient.model.Person;
 import com.easypatient.easypatient.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,20 +30,18 @@ public class PersonController {
         return personService.getAllPeople();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public Person getPersonById(@PathVariable("id") UUID id) {
         return personService.getPersonById(id)
                 .orElse(null);
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "{id}")
     public void deletePersonById(@PathVariable("id") UUID id) {
         personService.deletePerson(id);
     }
 
-    @PutMapping(path = "/{id}",
-    consumes={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-    produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE} )
+    @PutMapping(path = "{id}")
     public void updatePerson(@PathVariable("id") UUID id, @Valid @NonNull @RequestBody Person PersonToUpdate) {
         personService.updatePerson(id, PersonToUpdate);
     }

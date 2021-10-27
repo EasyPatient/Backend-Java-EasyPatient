@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository("postgres")
-public class PersonDataBaseAccessService implements PersonDao{
+public class PersonDataBaseAccessService implements PersonDao {
     private static List<Person> DB = new ArrayList<>();
 
     @Override
@@ -39,7 +39,7 @@ public class PersonDataBaseAccessService implements PersonDao{
         return selectPersonById(id)
                 .map(p -> {
                     int indexOfPersonToUpdate = DB.indexOf(p);
-                    if(indexOfPersonToUpdate >= 0) {
+                    if (indexOfPersonToUpdate >= 0) {
                         DB.set(indexOfPersonToUpdate, new Person(id,
                                 person.getName(),
                                 person.getAge(),
@@ -58,4 +58,5 @@ public class PersonDataBaseAccessService implements PersonDao{
                 .filter(person -> person.getId().equals(id))
                 .findFirst();
     }
+
 }
