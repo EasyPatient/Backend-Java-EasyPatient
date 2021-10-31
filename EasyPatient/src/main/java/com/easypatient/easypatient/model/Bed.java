@@ -1,6 +1,5 @@
 package com.easypatient.easypatient.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -9,7 +8,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
-@AllArgsConstructor
+@Builder
 public class Bed {
     private final UUID id;
     private final LocalDateTime createdAt;
@@ -17,20 +16,5 @@ public class Bed {
     private UUID patientId;
     private UUID roomId;
     private LocalDateTime updatedAt;
-
-    public Bed(@JsonProperty("id") UUID id,
-               @JsonProperty("number") int number,
-               @JsonProperty("patientId") UUID patientId,
-               @JsonProperty("roomId") UUID roomId) {
-        LocalDateTime presentTime = LocalDateTime.now();
-
-        this.id = id;
-        this.number = number;
-        this.patientId = patientId;
-        this.roomId = roomId;
-        this.createdAt = presentTime;
-        this.updatedAt = createdAt;
-    }
-
 
 }

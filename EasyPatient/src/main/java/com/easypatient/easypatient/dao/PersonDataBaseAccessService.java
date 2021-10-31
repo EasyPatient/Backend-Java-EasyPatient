@@ -27,7 +27,7 @@ public class PersonDataBaseAccessService implements PersonDao {
     }
 
     @Override
-    public int insertPerson(UUID id, Person person) {
+    public void insertPerson(UUID id, Person person) {
         String name = person.getName();
         int age = person.getAge();
         UUID bedId = person.getBedId();
@@ -35,30 +35,39 @@ public class PersonDataBaseAccessService implements PersonDao {
         LocalDateTime createdAt = person.getCreatedAt();
         LocalDateTime updatedAt = person.getUpdatedAt();
         jdbcTemplate.update(sqlInsretPerson, id, name, age, bedId, arrivedAt, createdAt, updatedAt);
-        return 1;
     }
 
     @Override
     public List<Person> selectAllPeople() {
-        return jdbcTemplate.query(sqlSelectAllPeople, (resultSet, i) -> {
-            UUID id = UUID.fromString(resultSet.getString("id"));
-            String name = resultSet.getString("name");
-            int age = resultSet.getInt("age");
-            UUID bedId = UUID.fromString((resultSet.getString("bed_id")));
-            LocalDateTime arrivedAt = resultSet.getTimestamp("arrived_at").toLocalDateTime();
-            return new Person(id, name, age, bedId, arrivedAt);
-        });
+        return jdbcTemplate.query(sqlSelectAllPeople,
+                (resultSet, i) -> {
+                    UUID id = UUID.fromString(resultSet.getString("id"));
+                    String name = resultSet.getString("name");
+                    int age = resultSet.getInt("age");
+                    UUID bedId = UUID.fromString((resultSet.getString("bed_id")));
+                    LocalDateTime arrivedAt = resultSet.getTimestamp("arrived_at").toLocalDateTime();
+                    LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
+                    LocalDateTime updatedAt = resultSet.getTimestamp("updated_at").toLocalDateTime();
+                    return Person.builder()
+                            .id(id)
+                            .name(name)
+                            .age(age)
+                            .bedId(bedId)
+                            .arrivedAt(arrivedAt)
+                            .createdAt(createdAt)
+                            .updatedAt(updatedAt)
+                            .build();
+                });
     }
 
     @Override
-    public int deletePersonById(UUID id) {
-        Object[] args = new Object[] {id};
+    public void deletePersonById(UUID id) {
+        Object[] args = new Object[]{id};
         jdbcTemplate.update(sqlDeletePerson, args);
-        return 1;
     }
 
     @Override
-    public int updatePersonById(UUID id, Person person) {
+    public void updatePersonById(UUID id, Person person) {
         String name = person.getName();
         int age = person.getAge();
         UUID bedId = person.getBedId();
@@ -67,7 +76,6 @@ public class PersonDataBaseAccessService implements PersonDao {
         LocalDateTime updatedAt = person.getUpdatedAt();
 
         jdbcTemplate.update(sqlUpdatePersonById, name, age, bedId, arrivedAt, createdAt, updatedAt, id);
-        return 1;
     }
 
     @Override
@@ -81,8 +89,18 @@ public class PersonDataBaseAccessService implements PersonDao {
                     int age = resultSet.getInt("age");
                     UUID bedId = UUID.fromString((resultSet.getString("bed_id")));
                     LocalDateTime arrivedAt = resultSet.getTimestamp("arrived_at").toLocalDateTime();
-                    return new Person(personId, name, age, bedId, arrivedAt);
-        });
+                    LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
+                    LocalDateTime updatedAt = resultSet.getTimestamp("updated_at").toLocalDateTime();
+                    return Person.builder()
+                            .id(personId)
+                            .name(name)
+                            .age(age)
+                            .bedId(bedId)
+                            .arrivedAt(arrivedAt)
+                            .createdAt(createdAt)
+                            .updatedAt(updatedAt)
+                            .build();
+                });
         return Optional.ofNullable(person);
     }
 

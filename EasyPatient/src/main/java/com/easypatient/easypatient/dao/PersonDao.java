@@ -7,13 +7,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PersonDao {
-    int insertPerson(UUID id, Person person);
+    void insertPerson(UUID id, Person person);
 
     List<Person> selectAllPeople();
 
-    int deletePersonById(UUID id);
+    void deletePersonById(UUID id);
 
-    int updatePersonById(UUID id, Person person);
+    void updatePersonById(UUID id, Person person);
 
     Optional<Person> selectPersonById(UUID id);
 }
