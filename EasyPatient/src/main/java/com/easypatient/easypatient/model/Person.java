@@ -18,7 +18,7 @@ public class Person {
     private final UUID id;
     @NotBlank
     private final String name;
-    private final Date arrivedAt;
+    private final LocalDateTime arrivedAt;
     private final LocalDateTime createdAt;
     private int age;
     private UUID bedId;
@@ -28,7 +28,7 @@ public class Person {
                   @JsonProperty("name") String name,
                   @JsonProperty("age") int age,
                   @JsonProperty("bedId") UUID bedId,
-                  @JsonProperty("arrivedAt") Date arrivedAt) {
+                  @JsonProperty("arrivedAt") LocalDateTime arrivedAt) {
         LocalDateTime presentDate = LocalDateTime.now();
 
         this.id = id;

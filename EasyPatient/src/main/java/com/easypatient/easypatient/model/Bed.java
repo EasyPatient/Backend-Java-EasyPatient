@@ -1,9 +1,7 @@
 package com.easypatient.easypatient.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,6 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Bed {
     private final UUID id;
     private final LocalDateTime createdAt;

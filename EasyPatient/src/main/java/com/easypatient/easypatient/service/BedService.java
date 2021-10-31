@@ -17,7 +17,7 @@ public class BedService {
     private final BedDao bedDao;
 
     @Autowired
-    public BedService(@Qualifier("postgres") BedDao bedDao) {
+    public BedService(@Qualifier("BedPostgres") BedDao bedDao) {
         this.bedDao = bedDao;
     }
 
