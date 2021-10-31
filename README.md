@@ -1,9 +1,9 @@
 # Backend-Java-EasyPatient
 Java Backend for easypatient project
 
-##Local postgres setup
+## Local postgres setup
 These steps allow you to run a docker container with postgres database on your local machine.
-###Steps to reproduce for local postgres database setup
+### Steps to reproduce for local postgres database setup
 1) Create docker container with postgres:
 
 `$ docker run --name {name} -e POSTGRES_PASSWORD={password} -d -p 5432:5432 postgres:alpine`
@@ -21,7 +21,7 @@ and copy the value of CONTAINER ID from this command output
 `$ docker exec -it {CONTAINER ID} bin/bash` ->
 `$ psql -U postgres`
 
-###Useful commands 
+### Useful commands 
 
 - List of databases:
 `$ \l`
