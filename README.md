@@ -1,6 +1,13 @@
 # Backend-Java-EasyPatient
 Java Backend for easypatient project
 
+## OpenAPI 
+To use openAPI type in your browser:
+
+`http://localhost:8080/swagger-ui.html`
+
+note: if you change the port of application the url will change
+
 ## Local postgres setup
 These steps allow you to run a docker container with postgres database on your local machine.
 ### Steps to reproduce for local postgres database setup
