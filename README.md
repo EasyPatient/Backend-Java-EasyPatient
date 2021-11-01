@@ -6,9 +6,8 @@ These steps allow you to run a docker container with postgres database on your l
 ### Steps to reproduce for local postgres database setup
 1) Create docker container with postgres:
 
-`$ docker run --name {name} -e POSTGRES_PASSWORD={password} -d -p 5432:5432 postgres:alpine`
+`$ docker run --name easyPatient -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres:alpine`
 
-note: this command will not work until you replace brackets with specified values
 
 2) Check if container has been properly set up:
 
@@ -20,6 +19,10 @@ and copy the value of CONTAINER ID from this command output
 
 `$ docker exec -it {CONTAINER ID} bin/bash` ->
 `$ psql -U postgres`
+
+4) Create database easypatientdb:
+
+`$ CREATE DATABASE eeasypatientdb`
 
 ### Useful commands 
 
