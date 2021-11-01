@@ -2,7 +2,6 @@ package com.easypatient.easypatient.model;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -10,14 +9,12 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode
 @Builder
-public class Person {
+public class Bed {
     private final UUID id;
-    @NotBlank
-    private final String name;
-    private int age;
-    private UUID bedId;
-    private final LocalDateTime arrivedAt;
     private final LocalDateTime createdAt;
+    private int number;
+    private UUID patientId;
+    private UUID roomId;
     private LocalDateTime updatedAt;
 
 }

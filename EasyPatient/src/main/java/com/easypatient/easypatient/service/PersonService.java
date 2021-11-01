@@ -15,12 +15,12 @@ public class PersonService {
     private final PersonDao personDao;
 
     @Autowired
-    public PersonService(@Qualifier("postgres") PersonDao personDao) {
+    public PersonService(@Qualifier("PersonPostgres") PersonDao personDao) {
         this.personDao = personDao;
     }
 
-    public int addPerson(Person person) {
-        return personDao.insertPerson(person.getId(), person);
+    public void addPerson(Person person) {
+        personDao.insertPerson(person.getId(), person);
     }
 
     public List<Person> getAllPeople() {
@@ -31,11 +31,11 @@ public class PersonService {
         return personDao.selectPersonById(id);
     }
 
-    public int deletePerson(UUID id) {
-        return personDao.deletePersonById(id);
+    public void deletePerson(UUID id) {
+        personDao.deletePersonById(id);
     }
 
-    public int updatePerson(UUID id, Person person) {
-        return personDao.updatePersonById(id, person);
+    public void updatePerson(UUID id, Person person) {
+        personDao.updatePersonById(id, person);
     }
 }
