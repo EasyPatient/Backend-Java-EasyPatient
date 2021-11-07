@@ -53,3 +53,5 @@ and copy the value of CONTAINER ID from this command output
 
 
 
+`$ docker build -f Dockerfile -t docker-easy-patient .`
+`$ docker run -p 8085:8085 docker-easy-patient`
