@@ -1,0 +1,258 @@
+{
+  "groups": [
+    {
+      "name": "app.datasource",
+      "type": "com.zaxxer.hikari.HikariDataSource",
+      "sourceType": "com.easypatient.easypatient.datasource.PostgresDataSource",
+      "sourceMethod": "hikariDataSource()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "app.datasource.allow-pool-suspension",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.auto-commit",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.catalog",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.connection-init-sql",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.connection-test-query",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.connection-timeout",
+      "type": "java.lang.Long",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.data-source-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.data-source-j-n-d-i",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.data-source-properties",
+      "type": "java.util.Properties",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.driver-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.exception-override-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.health-check-properties",
+      "type": "java.util.Properties",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.health-check-registry",
+      "type": "java.lang.Object",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.idle-timeout",
+      "type": "java.lang.Long",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.initialization-fail-timeout",
+      "type": "java.lang.Long",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.isolate-internal-queries",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.jdbc-url",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.keepalive-time",
+      "type": "java.lang.Long",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.leak-detection-threshold",
+      "type": "java.lang.Long",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.login-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.max-lifetime",
+      "type": "java.lang.Long",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.maximum-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.metric-registry",
+      "type": "java.lang.Object",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.metrics-tracker-factory",
+      "type": "com.zaxxer.hikari.metrics.MetricsTrackerFactory",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.minimum-idle",
+      "type": "java.lang.Integer",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.password",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.pool-name",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.pool-size",
+      "type": "java.lang.String",
+      "description": "Description for app.datasource.pool-size."
+    },
+    {
+      "name": "app.datasource.read-only",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.register-mbeans",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.scheduled-executor",
+      "type": "java.util.concurrent.ScheduledExecutorService",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.schema",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.transaction-isolation",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.username",
+      "type": "java.lang.String",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "app.datasource.validation-timeout",
+      "type": "java.lang.Long",
+      "sourceType": "com.zaxxer.hikari.HikariDataSource"
+    },
+    {
+      "name": "components",
+      "type": "java.lang.String",
+      "description": "Description for components."
+    },
+    {
+      "name": "info.description",
+      "type": "java.lang.String",
+      "description": "Description for info.description."
+    },
+    {
+      "name": "info.title",
+      "type": "java.lang.String",
+      "description": "Description for info.title."
+    },
+    {
+      "name": "info.version",
+      "type": "java.lang.String",
+      "description": "Description for info.version."
+    },
+    {
+      "name": "openapi",
+      "type": "java.lang.String",
+      "description": "Description for openapi."
+    },
+    {
+      "name": "paths.\/api\/v1\/person.get.description",
+      "type": "java.lang.String",
+      "description": "Description for paths.\/api\/v1\/person.get.description."
+    },
+    {
+      "name": "paths.\/api\/v1\/person.get.operationId",
+      "type": "java.lang.String",
+      "description": "Description for paths.\/api\/v1\/person.get.operationId."
+    },
+    {
+      "name": "paths.\/api\/v1\/person.get.responses",
+      "type": "java.lang.String",
+      "description": "Description for paths.\/api\/v1\/person.get.responses."
+    },
+    {
+      "name": "paths.\/api\/v1\/person.get.responses.200.content.application\/json.schema.items.$ref",
+      "type": "java.lang.String",
+      "description": "Description for paths.\/api\/v1\/person.get.responses.200.content.application\/json.schema.items.$ref."
+    },
+    {
+      "name": "paths.\/api\/v1\/person.get.responses.200.content.application\/json.schema.type",
+      "type": "java.lang.String",
+      "description": "Description for paths.\/api\/v1\/person.get.responses.200.content.application\/json.schema.type."
+    },
+    {
+      "name": "paths.\/api\/v1\/person.get.responses.200.description",
+      "type": "java.lang.String",
+      "description": "Description for paths.\/api\/v1\/person.get.responses.200.description."
+    },
+    {
+      "name": "paths.\/api\/v1\/person.get.summary",
+      "type": "java.lang.String",
+      "description": "Description for paths.\/api\/v1\/person.get.summary."
+    },
+    {
+      "name": "paths.\/api\/v1\/person.get.tags",
+      "type": "java.lang.String",
+      "description": "Description for paths.\/api\/v1\/person.get.tags."
+    },
+    {
+      "name": "tags.-name",
+      "type": "java.lang.String",
+      "description": "Description for tags.-name."
+    }
+  ],
+  "hints": []
+}
