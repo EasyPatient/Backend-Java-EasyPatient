@@ -1,9 +1,7 @@
 package com.easypatient.easypatient.service;
 
 import com.easypatient.easypatient.dao.BedDao;
-import com.easypatient.easypatient.dao.PersonDao;
 import com.easypatient.easypatient.model.Bed;
-import com.easypatient.easypatient.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
