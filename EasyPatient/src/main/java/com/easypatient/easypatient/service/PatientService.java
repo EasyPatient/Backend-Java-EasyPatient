@@ -24,7 +24,7 @@ public class PatientService {
     }
 
     public List<Patient> getAllPeople() {
-        return patientDao.selectAllPeople();
+        return patientDao.selectAllPatients();
     }
 
     public Optional<Patient> getPatientById(UUID id) {

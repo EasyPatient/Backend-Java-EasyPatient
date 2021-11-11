@@ -11,8 +11,7 @@ import java.util.UUID;
 public class BedDataBaseAccessService implements BedDao {
 
     @Override
-    public int insertBed(UUID id, Bed bed) {
-        return 1;
+    public void insertBed(UUID id, Bed bed) {
     }
 
     @Override
@@ -21,13 +20,11 @@ public class BedDataBaseAccessService implements BedDao {
     }
 
     @Override
-    public int deleteBedById(UUID id) {
-        return 1;
+    public void deleteBedById(UUID id) {
     }
 
     @Override
-    public int updateBedById(UUID id, Bed bed) {
-        return 1;
+    public void updateBedById(UUID id, Bed bed) {
     }
 
     @Override

@@ -19,8 +19,8 @@ public class BedService {
         this.bedDao = bedDao;
     }
 
-    public int addBed(Bed bed) {
-        return bedDao.insertBed(bed.getId(), bed);
+    public void addBed(Bed bed) {
+        bedDao.insertBed(bed.getId(), bed);
     }
 
     public List<Bed> getAllBeds() {
@@ -31,11 +31,11 @@ public class BedService {
         return bedDao.selectBedById(id);
     }
 
-    public int deleteBed(UUID id) {
-        return bedDao.deleteBedById(id);
+    public void deleteBed(UUID id) {
+        bedDao.deleteBedById(id);
     }
 
-    public int updateBed(UUID id, Bed bed) {
-        return bedDao.updateBedById(id, bed);
+    public void updateBed(UUID id, Bed bed) {
+        bedDao.updateBedById(id, bed);
     }
 }

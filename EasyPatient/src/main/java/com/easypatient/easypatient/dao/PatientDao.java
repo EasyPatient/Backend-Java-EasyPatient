@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface PatientDao {
     void insertPatient(UUID id, Patient patient);
 
-    List<Patient> selectAllPeople();
+    List<Patient> selectAllPatients();
 
     void deletePatientById(UUID id);
 

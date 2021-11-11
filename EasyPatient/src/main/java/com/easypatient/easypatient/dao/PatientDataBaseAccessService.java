@@ -60,7 +60,7 @@ public class PatientDataBaseAccessService implements PatientDao {
     }
 
     @Override
-    public List<Patient> selectAllPeople() {
+    public List<Patient> selectAllPatients() {
         return jdbcTemplate.query(sqlSelectAllPeople,
                 PatientDataBaseAccessService::mapRow);
     }
