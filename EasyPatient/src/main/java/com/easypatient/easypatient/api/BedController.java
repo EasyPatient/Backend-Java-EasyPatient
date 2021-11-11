@@ -26,7 +26,7 @@ public class BedController {
     }
 
     @GetMapping
-    public List<Bed> getAllPeople() {
+    public List<Bed> getAllBeds() {
         return bedService.getAllBeds();
     }
 

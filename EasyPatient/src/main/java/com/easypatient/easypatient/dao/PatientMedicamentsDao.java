@@ -7,13 +7,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PatientMedicamentsDao {
-    void insertPatientMedicaments(UUID id, PatientMedicaments patientMedicaments);
+    void insertPatientMedicaments(UUID patientId, PatientMedicaments patientMedicaments);
 
     List<PatientMedicaments> selectAllPatientMedicaments();
 
-    void deletePatientMedicamentsById(UUID id);
+    void deletePatientMedicamentsById(UUID patientId);
 
-    void updatePatientMedicamentsById(UUID id, PatientMedicaments patientMedicaments);
+    void updatePatientMedicamentsById(UUID patientId, PatientMedicaments patientMedicaments);
 
-    Optional<PatientMedicaments> selectPatientMedicamentsById(UUID id);
+    Optional<PatientMedicaments> selectPatientMedicamentsById(UUID patientId);
 }

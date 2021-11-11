@@ -7,13 +7,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SmartbandDao {
-    void insertSmartband(UUID id, Smartband smartband);
+    void insertSmartband(UUID smartbandId, Smartband smartband);
 
     List<Smartband> selectAllSmartbands();
 
-    void deleteSmartbandById(UUID id);
+    void deleteSmartbandById(UUID smartbandId);
 
-    void updateSmartbandById(UUID id, Smartband smartband);
+    void updateSmartbandById(UUID smartbandId, Smartband smartband);
 
-    Optional<Smartband> selectSmartbandById(UUID id);
+    Optional<Smartband> selectSmartbandById(UUID smartbandId);
 }

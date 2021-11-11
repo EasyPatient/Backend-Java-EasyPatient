@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository("PatientMedicamentsPostgres")
 public class PatientMedicamentsDataBaseAccessService implements PatientMedicamentsDao {
     @Override
-    public void insertPatientMedicaments(UUID id, PatientMedicaments patientMedicaments) {
+    public void insertPatientMedicaments(UUID patientId, PatientMedicaments patientMedicaments) {
     }
 
     @Override
@@ -19,15 +19,15 @@ public class PatientMedicamentsDataBaseAccessService implements PatientMedicamen
     }
 
     @Override
-    public void deletePatientMedicamentsById(UUID id) {
+    public void deletePatientMedicamentsById(UUID patientId) {
     }
 
     @Override
-    public void updatePatientMedicamentsById(UUID id, PatientMedicaments patientMedicaments) {
+    public void updatePatientMedicamentsById(UUID patientId, PatientMedicaments patientMedicaments) {
     }
 
     @Override
-    public Optional<PatientMedicaments> selectPatientMedicamentsById(UUID id) {
+    public Optional<PatientMedicaments> selectPatientMedicamentsById(UUID patientId) {
         return Optional.ofNullable(PatientMedicaments.builder().build());
     }
 }
