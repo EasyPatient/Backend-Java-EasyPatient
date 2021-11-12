@@ -1,11 +1,14 @@
 package com.easypatient.easypatient.service;
 
 import com.easypatient.easypatient.dao.PatientDao;
-import com.easypatient.easypatient.model.Patient;
+import com.easypatient.easypatient.dto.PatientDTO;
+import com.easypatient.easypatient.dto.PatientGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,23 +22,36 @@ public class PatientService {
         this.patientDao = patientDao;
     }
 
-    public void addPatient(Patient patient) {
-        patientDao.insertPatient(patient.getId(), patient);
+    public void addPatient(PatientDTO patient) {
+        patientDao.insertPatient(patient);
     }
 
-    public List<Patient> getAllPeople() {
+    public List<PatientGetDTO> getAllPatients() {
         return patientDao.selectAllPatients();
     }
 
-    public Optional<Patient> getPatientById(UUID id) {
+    public Optional<PatientGetDTO> getPatientById(UUID id) {
         return patientDao.selectPatientById(id);
+    }
+
+    public Optional<PatientGetDTO> getPatientByVariables(Optional<String> name,
+                                                         Optional<Integer> age,
+                                                         Optional<UUID> bedId,
+                                                         Optional<LocalDateTime> arrivedAt,
+                                                         Optional<LocalDateTime> createdAt,
+                                                         Optional<LocalDateTime> updatedAt) {
+        return patientDao.selectPatientByVariables(name, age, bedId, arrivedAt, createdAt, updatedAt);
     }
 
     public void deletePatient(UUID id) {
         patientDao.deletePatientById(id);
     }
 
-    public void updatePatient(UUID id, Patient patient) {
-        patientDao.updatePatientById(id, patient);
+    public void updatePatient(UUID id,
+                              Optional<String> name,
+                              Optional<Integer> age,
+                              Optional<UUID> bedId,
+                              Optional<LocalDateTime> arrivedAt) throws SQLException {
+        patientDao.updatePatientById(id, name, age, bedId, arrivedAt);
     }
 }

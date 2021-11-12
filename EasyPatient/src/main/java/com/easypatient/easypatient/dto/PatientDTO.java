@@ -1,6 +1,9 @@
-package com.easypatient.easypatient.model;
+package com.easypatient.easypatient.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -9,13 +12,9 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode
 @Builder
-public class Patient {
-    private final UUID id;
+public class PatientDTO {
     private final String name;
     private int age;
     private UUID bedId;
     private final LocalDateTime arrivedAt;
-    private final LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
 }

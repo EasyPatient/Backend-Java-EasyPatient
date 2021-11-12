@@ -1,6 +1,7 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.model.Patient;
+import com.easypatient.easypatient.dto.PatientDTO;
+import com.easypatient.easypatient.dto.PatientGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,11 +16,12 @@ import java.util.UUID;
 @Repository("PatientPostgres")
 public class PatientDataBaseAccessService implements PatientDao {
 
-    final String sqlSelectAllPeople = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient1";
-    final String sqlSelectPatientByID = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient1 WHERE id = ?";
-    final String sqlInsertPatient = "INSERT INTO patient1 VALUES(?, ?, ?, ?, ?, ?, ?)";
-    final String sqlDeletePatient = "DELETE FROM patient1 WHERE id = ?";
-    final String sqlUpdatePatientById = "UPDATE patient1 SET name = ?, age = ?, bed_id = ?, arrived_at = ?, created_at = ?, updated_at = ? WHERE id = ?";
+    final String sqlSelectAllPeople = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient";
+    final String sqlSelectPatientByID = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE id = ?";
+    final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE name LIKE ? AND age LIKE ? AND bed_id LIKE ? AND arrived_at LIKE ? AND created_at LIKE ? AND updated_at LIKE ?";
+    final String sqlInsertPatient = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?)";
+    final String sqlDeletePatient = "DELETE FROM patient WHERE id = ?";
+    final String sqlUpdatePatientById = "UPDATE patient SET name = ?, age = ?, bed_id = ?, arrived_at = ?, updated_at = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -28,7 +30,7 @@ public class PatientDataBaseAccessService implements PatientDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private static Patient mapRow(ResultSet resultSet, int i) throws SQLException {
+    private static PatientGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
         UUID id = UUID.fromString(resultSet.getString("id"));
         String name = resultSet.getString("name");
         int age = resultSet.getInt("age");
@@ -36,7 +38,7 @@ public class PatientDataBaseAccessService implements PatientDao {
         LocalDateTime arrivedAt = resultSet.getTimestamp("arrived_at").toLocalDateTime();
         LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
         LocalDateTime updatedAt = resultSet.getTimestamp("updated_at").toLocalDateTime();
-        return Patient.builder()
+        return PatientGetDTO.builder()
                 .id(id)
                 .name(name)
                 .age(age)
@@ -48,19 +50,20 @@ public class PatientDataBaseAccessService implements PatientDao {
     }
 
     @Override
-    public void insertPatient(UUID id, Patient patient) {
+    public void insertPatient(PatientDTO patient) {
+        LocalDateTime date = LocalDateTime.now();
+
         jdbcTemplate.update(sqlInsertPatient,
-                id,
                 patient.getName(),
                 patient.getAge(),
                 patient.getBedId(),
                 patient.getArrivedAt(),
-                patient.getCreatedAt(),
-                patient.getUpdatedAt());
+                date,
+                date);
     }
 
     @Override
-    public List<Patient> selectAllPatients() {
+    public List<PatientGetDTO> selectAllPatients() {
         return jdbcTemplate.query(sqlSelectAllPeople,
                 PatientDataBaseAccessService::mapRow);
     }
@@ -72,24 +75,95 @@ public class PatientDataBaseAccessService implements PatientDao {
     }
 
     @Override
-    public void updatePatientById(UUID id, Patient patient) {
+    public void updatePatientById(UUID id,
+                                  Optional<String> name,
+                                  Optional<Integer> age,
+                                  Optional<UUID> bedId,
+                                  Optional<LocalDateTime> arrivedAt) throws SQLException {
+        Optional<PatientGetDTO> existingPatientOptional = selectPatientById(id);
+        PatientGetDTO existingPatient;
+        String nameToUpdate;
+        int ageToUpdate;
+        UUID bedIdToUpdate;
+        LocalDateTime arrivedAtToUpdate;
+        LocalDateTime updatedAtToUpdate;
+
+        if(existingPatientOptional.isPresent()) {
+            existingPatient = existingPatientOptional.get();
+        } else {
+            throw new SQLException("Patient with ID:" + id + " does not exist.");
+        }
+
+        nameToUpdate = ((name.orElseGet(existingPatient::getName)));
+        ageToUpdate = (age.orElseGet(existingPatient::getAge));
+        bedIdToUpdate = (bedId.orElseGet(existingPatient::getBedId));
+        arrivedAtToUpdate = (arrivedAt.orElseGet(existingPatient::getArrivedAt));
+        updatedAtToUpdate = LocalDateTime.now();
+
         jdbcTemplate.update(sqlUpdatePatientById,
-                patient.getName(),
-                patient.getAge(),
-                patient.getBedId(),
-                patient.getArrivedAt(),
-                patient.getCreatedAt(),
-                patient.getUpdatedAt(),
+                nameToUpdate,
+                ageToUpdate,
+                bedIdToUpdate,
+                arrivedAtToUpdate,
+                updatedAtToUpdate,
                 id);
     }
 
     @Override
-    public Optional<Patient> selectPatientById(UUID id) {
-        Patient patient = jdbcTemplate.queryForObject(
+    public Optional<PatientGetDTO> selectPatientById(UUID id) {
+        PatientGetDTO patient = jdbcTemplate.queryForObject(
                 sqlSelectPatientByID,
                 new Object[]{id},
                 PatientDataBaseAccessService::mapRow);
         return Optional.ofNullable(patient);
+    }
+
+    @Override
+    public  Optional<PatientGetDTO> selectPatientByVariables(Optional<String> name,
+                                                             Optional<Integer> age,
+                                                             Optional<UUID> bedId,
+                                                             Optional<LocalDateTime> arrivedAt,
+                                                             Optional<LocalDateTime> createdAt,
+                                                             Optional<LocalDateTime> updatedAt) {
+        Object nameToQuery;
+        Object ageToQuery;
+        Object bedIdToQuery;
+        Object arrivedAtToQuery;
+        Object createdAtToQuery;
+        Object updatedAtToQuery;
+        nameToQuery = name.orElse("%");
+        if(age.isPresent()) {
+            ageToQuery = age.get();
+        } else {
+            ageToQuery = "%";
+        }
+        if(bedId.isPresent()) {
+            bedIdToQuery = bedId.get();
+        } else {
+            bedIdToQuery = "%";
+        }
+        if(arrivedAt.isPresent()) {
+            arrivedAtToQuery = arrivedAt.get();
+        } else {
+            arrivedAtToQuery = "%";
+        }
+        if(createdAt.isPresent()) {
+            createdAtToQuery = createdAt.get();
+        } else {
+            createdAtToQuery = "%";
+        }
+        if(updatedAt.isPresent()) {
+            updatedAtToQuery = updatedAt.get();
+        } else {
+            updatedAtToQuery = "%";
+        }
+
+        PatientGetDTO patient = jdbcTemplate.queryForObject(
+                sqlSelectPatientByVariable,
+                new Object[]{nameToQuery, ageToQuery, bedIdToQuery, arrivedAtToQuery, createdAtToQuery, updatedAtToQuery},
+                PatientDataBaseAccessService::mapRow);
+        return Optional.ofNullable(patient);
+
     }
 
 }
