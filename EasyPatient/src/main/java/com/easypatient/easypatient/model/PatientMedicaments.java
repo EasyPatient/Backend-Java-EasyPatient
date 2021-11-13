@@ -17,4 +17,5 @@ public class PatientMedicaments {
     private final UUID medicamentsId;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+
 }
