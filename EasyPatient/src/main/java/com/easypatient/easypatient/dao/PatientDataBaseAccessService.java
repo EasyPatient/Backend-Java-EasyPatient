@@ -12,13 +12,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository("PatientPostgres")
 public class PatientDataBaseAccessService implements PatientDao {
 
     final String sqlSelectAllPeople = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient";
     final String sqlSelectPatientByID = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE id = ?";
-    final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE name LIKE ? AND age LIKE ? AND bed_id LIKE ? AND arrived_at LIKE ? AND created_at LIKE ? AND updated_at LIKE ?";
+    final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE ";
+    final String sqlName = " name = ?";
+    final String sqlAge = " AND age = ?";
+    final String sqlBed = " AND bed_id = ?";
+    final String sqlArrivedAt = " AND arrived_at = ?";
+    final String sqlCreatedAt = " AND created_at = ?";
+    final String sqlUpdatedAt = " AND updated_at = ?";
+    final String sqlSemicolon = ";";
     final String sqlInsertPatient = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?)";
     final String sqlDeletePatient = "DELETE FROM patient WHERE id = ?";
     final String sqlUpdatePatientById = "UPDATE patient SET name = ?, age = ?, bed_id = ?, arrived_at = ?, updated_at = ? WHERE id = ?";
@@ -124,45 +132,78 @@ public class PatientDataBaseAccessService implements PatientDao {
                                                              Optional<UUID> bedId,
                                                              Optional<LocalDateTime> arrivedAt,
                                                              Optional<LocalDateTime> createdAt,
-                                                             Optional<LocalDateTime> updatedAt) {
-        Object nameToQuery;
-        Object ageToQuery;
-        Object bedIdToQuery;
-        Object arrivedAtToQuery;
-        Object createdAtToQuery;
-        Object updatedAtToQuery;
-        nameToQuery = name.orElse("%");
+                                                             Optional<LocalDateTime> updatedAt) throws SQLException {
+        int i = 0;
+        int k = 0;
+
+        List<String> expressions = List.of();
+        expressions.add("expression");
+        expressions.stream().collect(Collectors.joining(" "));
+
+        String sql = sqlSelectPatientByVariable;
+        if(name.isPresent()) {
+            i++;
+            sql.concat(sqlName);
+        }
         if(age.isPresent()) {
-            ageToQuery = age.get();
-        } else {
-            ageToQuery = "%";
+            i++;
+            sql.concat(sqlAge);
         }
         if(bedId.isPresent()) {
-            bedIdToQuery = bedId.get();
-        } else {
-            bedIdToQuery = "%";
+            i++;
+            sql.concat(sqlBed);
         }
         if(arrivedAt.isPresent()) {
-            arrivedAtToQuery = arrivedAt.get();
-        } else {
-            arrivedAtToQuery = "%";
+            i++;
+            sql.concat(sqlArrivedAt);
         }
         if(createdAt.isPresent()) {
-            createdAtToQuery = createdAt.get();
-        } else {
-            createdAtToQuery = "%";
+            i++;
+            sql.concat(sqlCreatedAt);
         }
         if(updatedAt.isPresent()) {
-            updatedAtToQuery = updatedAt.get();
-        } else {
-            updatedAtToQuery = "%";
+            i++;
+            sql.concat(sqlUpdatedAt);
         }
 
-        PatientGetDTO patient = jdbcTemplate.queryForObject(
-                sqlSelectPatientByVariable,
-                new Object[]{nameToQuery, ageToQuery, bedIdToQuery, arrivedAtToQuery, createdAtToQuery, updatedAtToQuery},
-                PatientDataBaseAccessService::mapRow);
-        return Optional.ofNullable(patient);
+        if(i != 0) {
+            Object[] jdbcTable = new Object[i];
+            if(name.isPresent()) {
+                jdbcTable[k] = name;
+                k++;
+            }
+            if(age.isPresent()) {
+                jdbcTable[k] = age;
+                k++;
+            }
+            if(bedId.isPresent()) {
+                jdbcTable[k] = bedId;
+                k++;
+            }
+            if(arrivedAt.isPresent()) {
+                jdbcTable[k] = arrivedAt;
+                k++;
+            }
+            if(createdAt.isPresent()) {
+                jdbcTable[k] = createdAt;
+                k++;
+            }
+            if(updatedAt.isPresent()) {
+                jdbcTable[k] = updatedAt;
+                k++;
+            }
+
+            PatientGetDTO patient = jdbcTemplate.queryForObject(
+                    sql,
+                    jdbcTable,
+                    PatientDataBaseAccessService::mapRow);
+            return Optional.ofNullable(patient);
+        } else {
+            throw new SQLException("can not query without any parameters!");
+        }
+
+
+
 
     }
 

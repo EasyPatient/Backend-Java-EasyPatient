@@ -46,7 +46,7 @@ public class PatientController {
                                                 @RequestParam(required = false) Optional<UUID> bedId,
                                                 @RequestParam(required = false) Optional<LocalDateTime> arrivedAt,
                                                 @RequestParam(required = false) Optional<LocalDateTime> createdAt,
-                                                @RequestParam(required = false) Optional<LocalDateTime> updatedAt) {
+                                                @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
         return patientService.getPatientByVariables(name,
                                                     age,
                                                     bedId,

@@ -3,6 +3,7 @@ package com.easypatient.easypatient.service;
 import com.easypatient.easypatient.dao.PatientDao;
 import com.easypatient.easypatient.dto.PatientDTO;
 import com.easypatient.easypatient.dto.PatientGetDTO;
+import com.easypatient.easypatient.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class PatientService {
                                                          Optional<UUID> bedId,
                                                          Optional<LocalDateTime> arrivedAt,
                                                          Optional<LocalDateTime> createdAt,
-                                                         Optional<LocalDateTime> updatedAt) {
+                                                         Optional<LocalDateTime> updatedAt) throws SQLException {
         return patientDao.selectPatientByVariables(name, age, bedId, arrivedAt, createdAt, updatedAt);
     }
 

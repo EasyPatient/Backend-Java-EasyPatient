@@ -29,5 +29,5 @@ public interface PatientDao {
                                                      Optional<UUID> bedId,
                                                      Optional<LocalDateTime> arrivedAt,
                                                      Optional<LocalDateTime> createdAt,
-                                                     Optional<LocalDateTime> updatedAt);
+                                                     Optional<LocalDateTime> updatedAt) throws SQLException;
 }
