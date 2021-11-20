@@ -1,15 +1,18 @@
 package com.easypatient.easypatient.api;
 
 import com.easypatient.easypatient.dto.MedicamentsDTO;
+import com.easypatient.easypatient.dto.MedicamentsGetDTO;
 import com.easypatient.easypatient.service.MedicamentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequestMapping("api/v1/medicaments")
 @RestController
@@ -26,12 +29,35 @@ public class MedicamentsController {
         medicamentsService.addMedicaments(medicaments);
     }
 
+    @GetMapping
+    public List<MedicamentsGetDTO> getAllMedicaments() {
+        return medicamentsService.getAllMedicaments();
+    }
 
+    @GetMapping(path = "{id}")
+    public MedicamentsGetDTO getMedicamentsById(@PathVariable("id") UUID id) {
+        return medicamentsService.getMedicamentsById(id).orElse(null);
+    }
 
+    @GetMapping(path = "/getByVariables")
+    public List<MedicamentsGetDTO> getMedicamentsByVariables(@RequestParam(required = false) Optional<String> name,
+                                                             @RequestParam(required = false) Optional<String> type,
+                                                             @RequestParam(required = false) Optional<String> value,
+                                                             @RequestParam(required = false) Optional<LocalDateTime> createdAt,
+                                                             @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
+        return medicamentsService.getMedicamentsByVariables(name, type, value, createdAt, updatedAt);
+    }
 
+    @DeleteMapping(path = "{id}")
+    public void deleteMedicamentsById(@PathVariable("id") UUID id) {
+        medicamentsService.deleteMedicaments(id);
+    }
 
-
-
-
-
+    @PutMapping(path = "{id}")
+    public void updateMedicamentsById(@PathVariable("id") UUID id,
+                                      @RequestParam(required = false) Optional<String> name,
+                                      @RequestParam(required = false) Optional<String> type,
+                                      @RequestParam(required = false) Optional<String> value) throws SQLException {
+        medicamentsService.updateMedicaments(id, name, type, value);
+    }
 }

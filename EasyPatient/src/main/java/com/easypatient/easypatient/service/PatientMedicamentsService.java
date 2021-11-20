@@ -3,7 +3,6 @@ package com.easypatient.easypatient.service;
 import com.easypatient.easypatient.dao.PatientMedicamentsDao;
 import com.easypatient.easypatient.dto.PatientMedicamentsDTO;
 import com.easypatient.easypatient.dto.PatientMedicamentsGetDTO;
-import com.easypatient.easypatient.model.PatientMedicaments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

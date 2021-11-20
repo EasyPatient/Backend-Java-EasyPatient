@@ -41,18 +41,18 @@ public class PatientController {
     }
 
     @GetMapping(path = "/getByVariables")
-    public PatientGetDTO getPatientsByVariables(@RequestParam(required = false) Optional<String> name,
-                                                @RequestParam(required = false) Optional<Integer> age,
-                                                @RequestParam(required = false) Optional<UUID> bedId,
-                                                @RequestParam(required = false) Optional<LocalDateTime> arrivedAt,
-                                                @RequestParam(required = false) Optional<LocalDateTime> createdAt,
-                                                @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
+    public List<PatientGetDTO> getPatientsByVariables(@RequestParam(required = false) Optional<String> name,
+                                                      @RequestParam(required = false) Optional<Integer> age,
+                                                      @RequestParam(required = false) Optional<UUID> bedId,
+                                                      @RequestParam(required = false) Optional<LocalDateTime> arrivedAt,
+                                                      @RequestParam(required = false) Optional<LocalDateTime> createdAt,
+                                                      @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
         return patientService.getPatientByVariables(name,
-                                                    age,
-                                                    bedId,
-                                                    arrivedAt,
-                                                    createdAt,
-                                                    updatedAt).orElse(null);
+                age,
+                bedId,
+                arrivedAt,
+                createdAt,
+                updatedAt);
     }
 
     @DeleteMapping(path = "{id}")
@@ -61,11 +61,11 @@ public class PatientController {
     }
 
     @PutMapping(path = "{id}")
-    public void updatePatient(@PathVariable("id") UUID id,
-                              @RequestParam(required = false) Optional<String> name,
-                              @RequestParam(required = false) Optional<Integer> age,
-                              @RequestParam(required = false) Optional<UUID> bedId,
-                              @RequestParam(required = false) Optional<LocalDateTime> arrivedAt) throws SQLException {
+    public void updatePatientById(@PathVariable("id") UUID id,
+                                  @RequestParam(required = false) Optional<String> name,
+                                  @RequestParam(required = false) Optional<Integer> age,
+                                  @RequestParam(required = false) Optional<UUID> bedId,
+                                  @RequestParam(required = false) Optional<LocalDateTime> arrivedAt) throws SQLException {
         patientService.updatePatient(id, name, age, bedId, arrivedAt);
     }
 }
