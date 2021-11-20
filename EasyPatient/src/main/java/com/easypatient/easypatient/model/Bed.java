@@ -11,10 +11,10 @@ import java.util.UUID;
 @Builder
 public class Bed {
     private final UUID id;
-    private final LocalDateTime createdAt;
     private int number;
     private UUID patientId;
     private UUID roomId;
     private LocalDateTime updatedAt;
+    private final LocalDateTime createdAt;
 
 }

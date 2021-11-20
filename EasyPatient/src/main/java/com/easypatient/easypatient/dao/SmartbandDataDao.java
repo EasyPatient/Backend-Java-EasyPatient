@@ -1,19 +1,20 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.model.SmartbandData;
+import com.easypatient.easypatient.dto.SmartbandDataDTO;
+import com.easypatient.easypatient.dto.SmartbandDataGetDTO;
 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface SmartbandDataDao {
-    void insertSmartbandData(UUID id, SmartbandData smartbandData);
+    void insertSmartbandData(SmartbandDataDTO smartbandData);
 
-    List<SmartbandData> selectAllSmartbandDatas();
+    List<SmartbandDataGetDTO> selectAllSmartbandDatas();
 
-    void deleteSmartbandDataById(UUID id);
+    void deleteSmartbandDataByIds(UUID smartbandId, UUID patientId);
 
-    void updateSmartbandDataById(UUID id, SmartbandData smartbandData);
+    List<SmartbandDataGetDTO> selectSmartbandDataByPatientId(UUID patientId) throws SQLException;
 
-    Optional<SmartbandData> selectSmartbandDataById(UUID id);
+    List<SmartbandDataGetDTO> selectSmartbandDataBySmartbandId(UUID smartbandId) throws SQLException;
 }

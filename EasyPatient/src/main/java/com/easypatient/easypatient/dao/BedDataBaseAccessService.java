@@ -1,8 +1,11 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.model.Bed;
+import com.easypatient.easypatient.dto.BedDTO;
+import com.easypatient.easypatient.dto.BedGetDTO;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,11 +14,11 @@ import java.util.UUID;
 public class BedDataBaseAccessService implements BedDao {
 
     @Override
-    public void insertBed(UUID id, Bed bed) {
+    public void insertBed(BedDTO bed) {
     }
 
     @Override
-    public List<Bed> selectAllBeds() {
+    public List<BedGetDTO> selectAllBeds() {
         return List.of();
     }
 
@@ -24,11 +27,23 @@ public class BedDataBaseAccessService implements BedDao {
     }
 
     @Override
-    public void updateBedById(UUID id, Bed bed) {
+    public void updateBedById(UUID id,
+                              Optional<Integer> number,
+                              Optional<UUID> patientId,
+                              Optional<UUID> roomId) throws SQLException {
     }
 
     @Override
-    public Optional<Bed> selectBedById(UUID id) {
-        return Optional.ofNullable(Bed.builder().build());
+    public Optional<BedGetDTO> selectBedById(UUID id) {
+        return Optional.ofNullable(BedGetDTO.builder().build());
+    }
+
+    @Override
+    public List<BedGetDTO> selectBedByVariables(Optional<Integer> number,
+                                                Optional<UUID> patientId,
+                                                Optional<UUID> roomId,
+                                                Optional<LocalDateTime> updatedAt,
+                                                Optional<LocalDateTime> createdAt) throws SQLException {
+        return List.of();
     }
 }

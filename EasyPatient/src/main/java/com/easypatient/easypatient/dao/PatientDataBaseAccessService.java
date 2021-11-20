@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository("PatientPostgres")
 public class PatientDataBaseAccessService implements PatientDao {
@@ -96,7 +95,7 @@ public class PatientDataBaseAccessService implements PatientDao {
         LocalDateTime arrivedAtToUpdate;
         LocalDateTime updatedAtToUpdate;
 
-        if(existingPatientOptional.isPresent()) {
+        if (existingPatientOptional.isPresent()) {
             existingPatient = existingPatientOptional.get();
         } else {
             throw new SQLException("Patient with ID:" + id + " does not exist.");
@@ -127,84 +126,86 @@ public class PatientDataBaseAccessService implements PatientDao {
     }
 
     @Override
-    public  Optional<PatientGetDTO> selectPatientByVariables(Optional<String> name,
-                                                             Optional<Integer> age,
-                                                             Optional<UUID> bedId,
-                                                             Optional<LocalDateTime> arrivedAt,
-                                                             Optional<LocalDateTime> createdAt,
-                                                             Optional<LocalDateTime> updatedAt) throws SQLException {
-        int i = 0;
-        int k = 0;
-
-        List<String> expressions = List.of();
-        expressions.add("expression");
-        expressions.stream().collect(Collectors.joining(" "));
-
-        String sql = sqlSelectPatientByVariable;
-        if(name.isPresent()) {
-            i++;
-            sql.concat(sqlName);
-        }
-        if(age.isPresent()) {
-            i++;
-            sql.concat(sqlAge);
-        }
-        if(bedId.isPresent()) {
-            i++;
-            sql.concat(sqlBed);
-        }
-        if(arrivedAt.isPresent()) {
-            i++;
-            sql.concat(sqlArrivedAt);
-        }
-        if(createdAt.isPresent()) {
-            i++;
-            sql.concat(sqlCreatedAt);
-        }
-        if(updatedAt.isPresent()) {
-            i++;
-            sql.concat(sqlUpdatedAt);
-        }
-
-        if(i != 0) {
-            Object[] jdbcTable = new Object[i];
-            if(name.isPresent()) {
-                jdbcTable[k] = name;
-                k++;
-            }
-            if(age.isPresent()) {
-                jdbcTable[k] = age;
-                k++;
-            }
-            if(bedId.isPresent()) {
-                jdbcTable[k] = bedId;
-                k++;
-            }
-            if(arrivedAt.isPresent()) {
-                jdbcTable[k] = arrivedAt;
-                k++;
-            }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt;
-                k++;
-            }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt;
-                k++;
-            }
-
-            PatientGetDTO patient = jdbcTemplate.queryForObject(
-                    sql,
-                    jdbcTable,
-                    PatientDataBaseAccessService::mapRow);
-            return Optional.ofNullable(patient);
-        } else {
-            throw new SQLException("can not query without any parameters!");
-        }
-
-
-
-
+    public List<PatientGetDTO> selectPatientByVariables(Optional<String> name,
+                                                        Optional<Integer> age,
+                                                        Optional<UUID> bedId,
+                                                        Optional<LocalDateTime> arrivedAt,
+                                                        Optional<LocalDateTime> createdAt,
+                                                        Optional<LocalDateTime> updatedAt) throws SQLException {
+//        int i = 0;
+//        int k = 0;
+//
+//        List<String> expressions = List.of();
+//        expressions.add("expression");
+//        expressions.stream().collect(Collectors.joining(" "));
+//
+//        String sql = sqlSelectPatientByVariable;
+//        if(name.isPresent()) {
+//            i++;
+//            sql.concat(sqlName);
+//        }
+//        if(age.isPresent()) {
+//            i++;
+//            sql.concat(sqlAge);
+//        }
+//        if(bedId.isPresent()) {
+//            i++;
+//            sql.concat(sqlBed);
+//        }
+//        if(arrivedAt.isPresent()) {
+//            i++;
+//            sql.concat(sqlArrivedAt);
+//        }
+//        if(createdAt.isPresent()) {
+//            i++;
+//            sql.concat(sqlCreatedAt);
+//        }
+//        if(updatedAt.isPresent()) {
+//            i++;
+//            sql.concat(sqlUpdatedAt);
+//        }
+//
+//        if(i != 0) {
+//            Object[] jdbcTable = new Object[i];
+//            if(name.isPresent()) {
+//                jdbcTable[k] = name;
+//                k++;
+//            }
+//            if(age.isPresent()) {
+//                jdbcTable[k] = age;
+//                k++;
+//            }
+//            if(bedId.isPresent()) {
+//                jdbcTable[k] = bedId;
+//                k++;
+//            }
+//            if(arrivedAt.isPresent()) {
+//                jdbcTable[k] = arrivedAt;
+//                k++;
+//            }
+//            if(createdAt.isPresent()) {
+//                jdbcTable[k] = createdAt;
+//                k++;
+//            }
+//            if(updatedAt.isPresent()) {
+//                jdbcTable[k] = updatedAt;
+//                k++;
+//            }
+//
+//            PatientGetDTO patient = jdbcTemplate.queryForObject(
+//                    sql,
+//                    jdbcTable,
+//                    PatientDataBaseAccessService::mapRow);
+//            return Optional.ofNullable(patient);
+//        } else {
+//            throw new SQLException("can not query without any parameters!");
+//        }
+//
+//
+//
+//
+//    }
+        return List.of();
     }
 
 }

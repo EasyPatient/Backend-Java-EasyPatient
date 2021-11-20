@@ -1,19 +1,20 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.model.StaffPatient;
+import com.easypatient.easypatient.dto.StaffPatientDTO;
+import com.easypatient.easypatient.dto.StaffPatientGetDTO;
 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface StaffPatientDao {
-    void insertStaffPatient(UUID id, StaffPatient staffPatient);
+    void insertStaffPatient(StaffPatientDTO staffPatient);
 
-    List<StaffPatient> selectAllStaffPatients();
+    List<StaffPatientGetDTO> selectAllStaffPatient();
 
-    void deleteStaffPatientById(UUID id);
+    void deleteStaffPatientByIds(UUID patientId, UUID staffId);
 
-    void updateStaffPatientById(UUID id, StaffPatient staffPatient);
+    List<StaffPatientGetDTO> selectStaffPatientByPatientId(UUID patientId) throws SQLException;
 
-    Optional<StaffPatient> selectStaffPatientById(UUID id);
+    List<StaffPatientGetDTO> selectStaffPatientByStaffId(UUID staffId) throws SQLException;
 }

@@ -1,19 +1,31 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.model.Bed;
+import com.easypatient.easypatient.dto.BedDTO;
+import com.easypatient.easypatient.dto.BedGetDTO;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface BedDao {
-    void insertBed(UUID id, Bed bed);
+    void insertBed(BedDTO bed);
 
-    List<Bed> selectAllBeds();
+    List<BedGetDTO> selectAllBeds();
 
     void deleteBedById(UUID id);
 
-    void updateBedById(UUID id, Bed bed);
+    void updateBedById(UUID id,
+                       Optional<Integer> number,
+                       Optional<UUID> patientId,
+                       Optional<UUID> roomId) throws SQLException;
 
-    Optional<Bed> selectBedById(UUID id);
+    Optional<BedGetDTO> selectBedById(UUID id);
+
+    List<BedGetDTO> selectBedByVariables(Optional<Integer> number,
+                                         Optional<UUID> patientId,
+                                         Optional<UUID> roomId,
+                                         Optional<LocalDateTime> updatedAt,
+                                         Optional<LocalDateTime> createdAt) throws SQLException;
 }

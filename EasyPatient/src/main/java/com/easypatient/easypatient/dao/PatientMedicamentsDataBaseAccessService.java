@@ -1,33 +1,35 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.model.PatientMedicaments;
+import com.easypatient.easypatient.dto.PatientMedicamentsDTO;
+import com.easypatient.easypatient.dto.PatientMedicamentsGetDTO;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository("PatientMedicamentsPostgres")
 public class PatientMedicamentsDataBaseAccessService implements PatientMedicamentsDao {
     @Override
-    public void insertPatientMedicaments(UUID patientId, PatientMedicaments patientMedicaments) {
+    public void insertPatientMedicaments(PatientMedicamentsDTO patientMedicaments) {
     }
 
     @Override
-    public List<PatientMedicaments> selectAllPatientMedicaments() {
+    public List<PatientMedicamentsGetDTO> selectAllPatientMedicaments() {
         return List.of();
     }
 
     @Override
-    public void deletePatientMedicamentsById(UUID patientId) {
+    public void deletePatientMedicamentsByIds(UUID patientId, UUID medicamentsId) {
     }
 
     @Override
-    public void updatePatientMedicamentsById(UUID patientId, PatientMedicaments patientMedicaments) {
+    public List<PatientMedicamentsGetDTO> selectPatientMedicamentsByPatientId(UUID patientId) throws SQLException {
+        return List.of();
     }
 
     @Override
-    public Optional<PatientMedicaments> selectPatientMedicamentsById(UUID patientId) {
-        return Optional.ofNullable(PatientMedicaments.builder().build());
+    public List<PatientMedicamentsGetDTO> selectPatientMedicamentsByMedicamentsId(UUID medicamentsId) throws SQLException {
+        return List.of();
     }
 }

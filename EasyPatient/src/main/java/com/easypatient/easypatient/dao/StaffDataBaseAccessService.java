@@ -1,8 +1,11 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.model.Staff;
+import com.easypatient.easypatient.dto.StaffDTO;
+import com.easypatient.easypatient.dto.StaffGetDTO;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,11 +13,11 @@ import java.util.UUID;
 @Repository("StaffPostgres")
 public class StaffDataBaseAccessService implements StaffDao {
     @Override
-    public void insertStaff(UUID id, Staff staff) {
+    public void insertStaff(StaffDTO staff) {
     }
 
     @Override
-    public List<Staff> selectAllStaffs() {
+    public List<StaffGetDTO> selectAllStaff() {
         return List.of();
     }
 
@@ -23,11 +26,29 @@ public class StaffDataBaseAccessService implements StaffDao {
     }
 
     @Override
-    public void updateStaffById(UUID id, Staff staff) {
+    public void updateStaffById(UUID id,
+                                Optional<String> name,
+                                Optional<String> email,
+                                Optional<String> phone,
+                                Optional<String> phoneAreaCode,
+                                Optional<String> password,
+                                Optional<String> role) throws SQLException {
     }
 
     @Override
-    public Optional<Staff> selectStaffById(UUID id) {
-        return Optional.ofNullable(Staff.builder().build());
+    public Optional<StaffGetDTO> selectStaffById(UUID id) {
+        return Optional.ofNullable(StaffGetDTO.builder().build());
+    }
+
+    @Override
+    public List<StaffGetDTO> selectStaffByVariables(Optional<String> name,
+                                                    Optional<String> email,
+                                                    Optional<String> phone,
+                                                    Optional<String> phoneAreaCode,
+                                                    Optional<String> password,
+                                                    Optional<String> role,
+                                                    Optional<LocalDateTime> createdAt,
+                                                    Optional<LocalDateTime> updatedAt) throws SQLException {
+        return List.of();
     }
 }

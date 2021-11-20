@@ -1,14 +1,18 @@
 package com.easypatient.easypatient.service;
 
 import com.easypatient.easypatient.dao.PatientMedicamentsDao;
+import com.easypatient.easypatient.dto.PatientMedicamentsDTO;
+import com.easypatient.easypatient.dto.PatientMedicamentsGetDTO;
 import com.easypatient.easypatient.model.PatientMedicaments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class PatientMedicamentsService {
     private final PatientMedicamentsDao patientMedicamentsDao;
 
@@ -17,23 +21,24 @@ public class PatientMedicamentsService {
         this.patientMedicamentsDao = patientMedicamentsDao;
     }
 
-    public void addPatientMedicaments(PatientMedicaments patientMedicaments) {
-        patientMedicamentsDao.insertPatientMedicaments(patientMedicaments.getPatientId(), patientMedicaments);
+    public void addPatientMedicaments(PatientMedicamentsDTO patientMedicaments) {
+        patientMedicamentsDao.insertPatientMedicaments(patientMedicaments);
     }
 
-    public List<PatientMedicaments> getAllPatientMedicamentss() {
+    public List<PatientMedicamentsGetDTO> getAllPatientMedicaments() {
         return patientMedicamentsDao.selectAllPatientMedicaments();
     }
 
-    public Optional<PatientMedicaments> getPatientMedicamentsById(UUID patientId) {
-        return patientMedicamentsDao.selectPatientMedicamentsById(patientId);
+    public List<PatientMedicamentsGetDTO> getPatientMedicamentsByPatientId(UUID patientId) throws SQLException {
+        return patientMedicamentsDao.selectPatientMedicamentsByPatientId(patientId);
     }
 
-    public void deletePatientMedicaments(UUID patientId) {
-        patientMedicamentsDao.deletePatientMedicamentsById(patientId);
+    public List<PatientMedicamentsGetDTO> getPatientMedicamentsByMedicamentsId(UUID medicamentsId) throws SQLException {
+        return patientMedicamentsDao.selectPatientMedicamentsByMedicamentsId(medicamentsId);
     }
 
-    public void updatePatientMedicaments(UUID patientId, PatientMedicaments patientMedicaments) {
-        patientMedicamentsDao.updatePatientMedicamentsById(patientId, patientMedicaments);
+    public void deletePatientMedicaments(UUID patientId, UUID medicamentsId) {
+        patientMedicamentsDao.deletePatientMedicamentsByIds(patientId, medicamentsId);
     }
+
 }

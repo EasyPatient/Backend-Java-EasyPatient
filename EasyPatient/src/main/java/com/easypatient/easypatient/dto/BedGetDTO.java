@@ -1,4 +1,4 @@
-package com.easypatient.easypatient.model;
+package com.easypatient.easypatient.dto;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -12,9 +12,11 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode
 @Builder
-public class StaffPatient {
-    private final UUID patientId;
-    private UUID staffId;
-    private final LocalDateTime createdAt;
+public class BedGetDTO {
+    private final UUID id;
+    private int number;
+    private UUID patientId;
+    private UUID roomId;
     private LocalDateTime updatedAt;
+    private final LocalDateTime createdAt;
 }

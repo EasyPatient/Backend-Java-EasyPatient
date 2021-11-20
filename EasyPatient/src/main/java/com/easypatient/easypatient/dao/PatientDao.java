@@ -24,7 +24,7 @@ public interface PatientDao {
 
     Optional<PatientGetDTO> selectPatientById(UUID id);
 
-    Optional<PatientGetDTO> selectPatientByVariables(Optional<String> name,
+    List<PatientGetDTO> selectPatientByVariables(Optional<String> name,
                                                      Optional<Integer> age,
                                                      Optional<UUID> bedId,
                                                      Optional<LocalDateTime> arrivedAt,

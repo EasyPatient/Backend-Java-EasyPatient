@@ -1,33 +1,36 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.model.StaffPatient;
+import com.easypatient.easypatient.dto.StaffPatientDTO;
+import com.easypatient.easypatient.dto.StaffPatientGetDTO;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository("StaffPatientPostgres")
 public class StaffPatientDataBaseAccessService implements StaffPatientDao{
     @Override
-    public void insertStaffPatient(UUID id, StaffPatient staffPatient) {
+    public void insertStaffPatient(StaffPatientDTO staffPatient) {
     }
 
     @Override
-    public List<StaffPatient> selectAllStaffPatients() {
+    public List<StaffPatientGetDTO> selectAllStaffPatient() {
         return List.of();
     }
 
     @Override
-    public void deleteStaffPatientById(UUID id) {
+    public void deleteStaffPatientByIds(UUID patientId, UUID staffId) {
     }
 
     @Override
-    public void updateStaffPatientById(UUID id, StaffPatient staffPatient) {
+    public List<StaffPatientGetDTO> selectStaffPatientByPatientId(UUID patientId) throws SQLException {
+        return List.of();
     }
 
     @Override
-    public Optional<StaffPatient> selectStaffPatientById(UUID id) {
-        return Optional.ofNullable(StaffPatient.builder().build());
+    public List<StaffPatientGetDTO> selectStaffPatientByStaffId(UUID stafftId) throws SQLException {
+        return List.of();
     }
+
 }
