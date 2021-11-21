@@ -3,6 +3,7 @@ package com.easypatient.easypatient.dao;
 import com.easypatient.easypatient.dto.MedicamentsDTO;
 import com.easypatient.easypatient.dto.MedicamentsGetDTO;
 import com.easypatient.easypatient.dto.PatientGetDTO;
+import com.easypatient.easypatient.model.Medicaments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class MedicamentsDataBaseAccessService implements MedicamentsDao{
 
     final String sqlSelectAllMedicaments = "SELECT id, name, type, value, created_at, updated_at FROM medicaments";
+    final String sqlSelectMedicamentsByID = "SELECT id, name, type, value, created_at, updated_at FROM medicaments WHERE id = ?";
     final String sqlInsertMedicaments = "INSERT INTO medicaments VALUES(?, ?, ?, ?, ?)";
 
 
@@ -76,6 +78,10 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
 
     @Override
     public Optional<MedicamentsGetDTO> selectMedicamentsById(UUID id) {
+        MedicamentsGetDTO medicaments = jdbcTemplate.queryForObject(
+                sqlSelectMedicamentsByID,
+                new Object[]{id},
+                MedicamentsDataBaseAccessService::mapRow);
         return Optional.ofNullable(MedicamentsGetDTO.builder().build());
     }
 

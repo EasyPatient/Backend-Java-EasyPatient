@@ -16,7 +16,9 @@ import java.util.UUID;
 @Repository("StaffPatientPostgres")
 public class StaffPatientDataBaseAccessService implements StaffPatientDao{
 
-    final String sqlSelectAllStaffPatient = "SELECT patient_id, staff_id, created_at, updated_at FROM patient";
+    final String sqlSelectAllStaffPatient = "SELECT patient_id, staff_id, created_at, updated_at FROM staff_patient";
+    final String sqlSelectStaffPatientByPatientId = "SELECT patient_id, staff_id, created_at, updated_at FROM staff_patient WHERE patient_id = ?";
+    final String sqlSelectStaffPatientByStaffId = "SELECT patient_id, staff_id, created_at, updated_at FROM staff_patient WHERE staff_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -56,11 +58,19 @@ public class StaffPatientDataBaseAccessService implements StaffPatientDao{
 
     @Override
     public List<StaffPatientGetDTO> selectStaffPatientByPatientId(UUID patientId) throws SQLException {
+        StaffPatientGetDTO staffPatient = jdbcTemplate.queryForObject(
+                sqlSelectStaffPatientByPatientId,
+                new Object[]{patientId},
+                StaffPatientDataBaseAccessService::mapRow);
         return List.of();
     }
 
     @Override
     public List<StaffPatientGetDTO> selectStaffPatientByStaffId(UUID stafftId) throws SQLException {
+        StaffPatientGetDTO staffPatient = jdbcTemplate.queryForObject(
+                sqlSelectStaffPatientByStaffId,
+                new Object[]{stafftId},
+                StaffPatientDataBaseAccessService::mapRow);
         return List.of();
     }
 

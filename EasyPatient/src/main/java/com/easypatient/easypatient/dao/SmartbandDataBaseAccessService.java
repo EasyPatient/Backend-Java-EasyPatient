@@ -20,6 +20,8 @@ import java.util.UUID;
 public class SmartbandDataBaseAccessService implements SmartbandDao {
 
     final String sqlSelectAllSmartband = "SELECT id, mac, name, created_at, updated_at FROM smartband";
+    final String sqlSelectSmartbandByID = "SELECT id, mac, name, created_at, updated_at FROM smartband WHERE id = ?";
+    final String sqlInsertSmartband = "INSERT INTO smartband VALUES(?, ?, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -45,6 +47,13 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
 
     @Override
     public void insertSmartband(SmartbandDTO smartband) {
+        LocalDateTime date = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlInsertSmartband,
+                smartband.getMac(),
+                smartband.getName(),
+                date,
+                date);
     }
 
     @Override
@@ -65,6 +74,10 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
 
     @Override
     public Optional<SmartbandGetDTO> selectSmartbandById(UUID id) {
+        SmartbandGetDTO smartband = jdbcTemplate.queryForObject(
+                sqlSelectSmartbandByID,
+                new Object[]{id},
+                SmartbandDataBaseAccessService::mapRow);
         return Optional.ofNullable(SmartbandGetDTO.builder().build());
     }
 
