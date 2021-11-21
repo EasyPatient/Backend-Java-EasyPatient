@@ -50,8 +50,8 @@ public class BedDataBaseAccessService implements BedDao {
         final String sqlNumber = " (number = ?)";
         final String sqlPatientId = " (patient_id = ?)";
         final String sqlRoomId = " (room_id = ?)";
-        final String sqlUpdatedAt = " (created_at = ?)";
-        final String sqlCreatedAt = " (updated_at = ?)";
+        final String sqlCreatedAt = " (created_at = ?)";
+        final String sqlUpdatedAt = " (updated_at = ?)";
         final String sqlAnd = " AND ";
         final String sqlSemicolon = ";";
 
