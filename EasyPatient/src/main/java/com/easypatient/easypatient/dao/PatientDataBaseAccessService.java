@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository("PatientPostgres")
 public class PatientDataBaseAccessService implements PatientDao {
@@ -19,12 +20,13 @@ public class PatientDataBaseAccessService implements PatientDao {
     final String sqlSelectAllPeople = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient";
     final String sqlSelectPatientByID = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE id = ?";
     final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE ";
-    final String sqlName = " name = ?";
-    final String sqlAge = " AND age = ?";
-    final String sqlBed = " AND bed_id = ?";
-    final String sqlArrivedAt = " AND arrived_at = ?";
-    final String sqlCreatedAt = " AND created_at = ?";
-    final String sqlUpdatedAt = " AND updated_at = ?";
+    final String sqlName = " (name = ?)";
+    final String sqlAge = " (age = ?)";
+    final String sqlBed = " (bed_id = ?)";
+    final String sqlArrivedAt = " (arrived_at = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
     final String sqlInsertPatient = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?)";
     final String sqlDeletePatient = "DELETE FROM patient WHERE id = ?";
@@ -132,80 +134,93 @@ public class PatientDataBaseAccessService implements PatientDao {
                                                         Optional<LocalDateTime> arrivedAt,
                                                         Optional<LocalDateTime> createdAt,
                                                         Optional<LocalDateTime> updatedAt) throws SQLException {
-//        int i = 0;
-//        int k = 0;
-//
-//        List<String> expressions = List.of();
-//        expressions.add("expression");
-//        expressions.stream().collect(Collectors.joining(" "));
-//
-//        String sql = sqlSelectPatientByVariable;
-//        if(name.isPresent()) {
-//            i++;
-//            sql.concat(sqlName);
-//        }
-//        if(age.isPresent()) {
-//            i++;
-//            sql.concat(sqlAge);
-//        }
-//        if(bedId.isPresent()) {
-//            i++;
-//            sql.concat(sqlBed);
-//        }
-//        if(arrivedAt.isPresent()) {
-//            i++;
-//            sql.concat(sqlArrivedAt);
-//        }
-//        if(createdAt.isPresent()) {
-//            i++;
-//            sql.concat(sqlCreatedAt);
-//        }
-//        if(updatedAt.isPresent()) {
-//            i++;
-//            sql.concat(sqlUpdatedAt);
-//        }
-//
-//        if(i != 0) {
-//            Object[] jdbcTable = new Object[i];
-//            if(name.isPresent()) {
-//                jdbcTable[k] = name;
-//                k++;
-//            }
-//            if(age.isPresent()) {
-//                jdbcTable[k] = age;
-//                k++;
-//            }
-//            if(bedId.isPresent()) {
-//                jdbcTable[k] = bedId;
-//                k++;
-//            }
-//            if(arrivedAt.isPresent()) {
-//                jdbcTable[k] = arrivedAt;
-//                k++;
-//            }
-//            if(createdAt.isPresent()) {
-//                jdbcTable[k] = createdAt;
-//                k++;
-//            }
-//            if(updatedAt.isPresent()) {
-//                jdbcTable[k] = updatedAt;
-//                k++;
-//            }
-//
-//            PatientGetDTO patient = jdbcTemplate.queryForObject(
-//                    sql,
-//                    jdbcTable,
-//                    PatientDataBaseAccessService::mapRow);
-//            return Optional.ofNullable(patient);
-//        } else {
-//            throw new SQLException("can not query without any parameters!");
-//        }
-//
-//
-//
-//
-//    }
-        return List.of();
+        int i = 0;
+        int k = 0;
+
+        List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectPatientByVariable));
+
+        if(name.isPresent()) {
+            i++;
+            expressions.add(sqlName);
+        }
+        if(age.isPresent()) {
+            i++;
+            expressions.add(sqlAge);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(bedId.isPresent()) {
+            i++;
+            expressions.add(sqlBed);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(arrivedAt.isPresent()) {
+            i++;
+            expressions.add(sqlArrivedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(createdAt.isPresent()) {
+            i++;
+            expressions.add(sqlCreatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(updatedAt.isPresent()) {
+            i++;
+            expressions.add(sqlUpdatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+
+        expressions.add(sqlSemicolon);
+        String sqlExpression = String.join(" ", expressions);
+
+        if(i != 0) {
+            Object[] jdbcTable = new Object[i];
+            if(name.isPresent()) {
+                jdbcTable[k] = name.get();
+                k++;
+            }
+            if(age.isPresent()) {
+                jdbcTable[k] = age.get();
+                k++;
+            }
+            if(bedId.isPresent()) {
+                jdbcTable[k] = bedId.get();
+                k++;
+            }
+            if(arrivedAt.isPresent()) {
+                jdbcTable[k] = arrivedAt.get();
+                k++;
+            }
+            if(createdAt.isPresent()) {
+                jdbcTable[k] = createdAt.get();
+                k++;
+            }
+            if(updatedAt.isPresent()) {
+                jdbcTable[k] = updatedAt.get();
+                k++;
+            }
+            return jdbcTemplate.query(
+                    sqlExpression,
+                    jdbcTable,
+                    PatientDataBaseAccessService::mapRow);
+        } else {
+            throw new SQLException("can not query without any parameters!");
+        }
+
+
+
+
     }
+
+
 
 }
