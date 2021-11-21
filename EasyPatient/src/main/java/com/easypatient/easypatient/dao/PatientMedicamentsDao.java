@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PatientMedicamentsDao {
-    void insertPatientMedicaments(PatientMedicamentsDTO patientMedicaments);
+    void insertPatientMedicaments(PatientMedicamentsDTO patientMedicaments) throws SQLException;
 
     List<PatientMedicamentsGetDTO> selectAllPatientMedicaments();
 

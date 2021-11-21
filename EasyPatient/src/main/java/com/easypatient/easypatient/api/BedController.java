@@ -25,7 +25,7 @@ public class BedController {
     }
 
     @PostMapping
-    public void addBed(@Valid @NonNull @RequestBody BedDTO Bed) {
+    public void addBed(@Valid @NonNull @RequestBody BedDTO Bed) throws SQLException {
         bedService.addBed(Bed);
     }
 

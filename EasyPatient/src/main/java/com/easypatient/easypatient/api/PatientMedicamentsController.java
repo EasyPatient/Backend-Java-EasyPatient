@@ -23,7 +23,7 @@ public class PatientMedicamentsController {
     }
 
     @PostMapping
-    public void addPatientMedicaments(@Valid @NonNull @RequestBody PatientMedicamentsDTO patientMedicaments) {
+    public void addPatientMedicaments(@Valid @NonNull @RequestBody PatientMedicamentsDTO patientMedicaments) throws SQLException {
         patientMedicamentsService.addPatientMedicaments(patientMedicaments);
     }
 

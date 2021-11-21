@@ -23,7 +23,7 @@ public class SmartbandDataService {
         this.smartbandDataDao = smartbandDataDao;
     }
 
-    public void addSmartbandData(SmartbandDataDTO smartbandData) {
+    public void addSmartbandData(SmartbandDataDTO smartbandData) throws SQLException {
         smartbandDataDao.insertSmartbandData(smartbandData);
     }
 

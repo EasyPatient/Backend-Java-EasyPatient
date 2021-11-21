@@ -22,7 +22,7 @@ public class BedService {
         this.bedDao = bedDao;
     }
 
-    public void addBed(BedDTO bed) {
+    public void addBed(BedDTO bed) throws SQLException {
         bedDao.insertBed(bed);
     }
 

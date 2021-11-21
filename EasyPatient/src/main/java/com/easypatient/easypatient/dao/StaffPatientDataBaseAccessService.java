@@ -1,8 +1,6 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.dto.PatientGetDTO;
-import com.easypatient.easypatient.dto.StaffPatientDTO;
-import com.easypatient.easypatient.dto.StaffPatientGetDTO;
+import com.easypatient.easypatient.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository("StaffPatientPostgres")
@@ -19,12 +18,21 @@ public class StaffPatientDataBaseAccessService implements StaffPatientDao{
     final String sqlSelectAllStaffPatient = "SELECT patient_id, staff_id, created_at, updated_at FROM staff_patient";
     final String sqlSelectStaffPatientByPatientId = "SELECT patient_id, staff_id, created_at, updated_at FROM staff_patient WHERE patient_id = ?";
     final String sqlSelectStaffPatientByStaffId = "SELECT patient_id, staff_id, created_at, updated_at FROM staff_patient WHERE staff_id = ?";
+    final String sqlInsertStaffPatient = "INSERT INTO staff_patient  VALUES(?, ?, ?, ?)";
+    final String sqlDeleteStaffPatient = "DELETE FROM staff_patient WHERE patient_id = ? AND staff_id = ?";
+
 
     private final JdbcTemplate jdbcTemplate;
+    private final PatientDataBaseAccessService patientDataBaseAccessService;
+    private final StaffDataBaseAccessService staffDataBaseAccessService;
 
     @Autowired
-    public StaffPatientDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+    public StaffPatientDataBaseAccessService(JdbcTemplate jdbcTemplate,
+                                             PatientDataBaseAccessService patientDataBaseAccessService,
+                                             StaffDataBaseAccessService staffDataBaseAccessService) {
         this.jdbcTemplate = jdbcTemplate;
+        this.patientDataBaseAccessService = patientDataBaseAccessService;
+        this.staffDataBaseAccessService = staffDataBaseAccessService;
     }
 
     private static StaffPatientGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -41,7 +49,25 @@ public class StaffPatientDataBaseAccessService implements StaffPatientDao{
     }
 
     @Override
-    public void insertStaffPatient(StaffPatientDTO staffPatient) {
+    public void insertStaffPatient(StaffPatientDTO staffPatient) throws SQLException {
+        LocalDateTime date = LocalDateTime.now();
+
+        UUID patientId = staffPatient.getPatientId();
+        UUID staffId = staffPatient.getStaffId();
+
+        Optional<PatientGetDTO> patientFromDB = patientDataBaseAccessService.selectPatientById(patientId);
+        Optional<StaffGetDTO> staffFromDB = staffDataBaseAccessService.selectStaffById(staffId);
+
+        if(patientFromDB.isPresent() && staffFromDB.isPresent()) {
+            jdbcTemplate.update(sqlInsertStaffPatient,
+                    staffPatient.getPatientId(),
+                    staffPatient.getStaffId(),
+                    date,
+                    date);
+        } else {
+            throw new SQLException("can not insert staff patient with patient ID: " + patientId + ", and staff ID: " + staffId);
+        }
+
     }
 
     @Override
@@ -54,6 +80,8 @@ public class StaffPatientDataBaseAccessService implements StaffPatientDao{
 
     @Override
     public void deleteStaffPatientByIds(UUID patientId, UUID staffId) {
+        Object[] args = new Object[]{patientId, staffId};
+        jdbcTemplate.update(sqlDeleteStaffPatient, args);
     }
 
     @Override

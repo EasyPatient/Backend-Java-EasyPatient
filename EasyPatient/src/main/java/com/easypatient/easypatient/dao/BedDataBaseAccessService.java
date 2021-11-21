@@ -3,6 +3,7 @@ package com.easypatient.easypatient.dao;
 import com.easypatient.easypatient.dto.BedDTO;
 import com.easypatient.easypatient.dto.BedGetDTO;
 import com.easypatient.easypatient.dto.PatientGetDTO;
+import com.easypatient.easypatient.dto.RoomGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -27,12 +28,22 @@ public class BedDataBaseAccessService implements BedDao {
     final String sqlUpdatedAt = " (updated_at = ?)";
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
+    final String sqlInsertBed = "INSERT INTO bed VALUES(?, ?, ?, ?, ?)";
+    final String sqlDeleteBed = "DELETE FROM bed WHERE id = ?";
+
+
 
     private final JdbcTemplate jdbcTemplate;
+    private final PatientDataBaseAccessService patientDataBaseAccessService;
+    private final RoomDataBaseAccessService roomDataBaseAccessService;
 
     @Autowired
-    public BedDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+    public BedDataBaseAccessService(JdbcTemplate jdbcTemplate,
+                                    PatientDataBaseAccessService patientDataBaseAccessService,
+                                    RoomDataBaseAccessService roomDataBaseAccessService) {
         this.jdbcTemplate = jdbcTemplate;
+        this.patientDataBaseAccessService = patientDataBaseAccessService;
+        this.roomDataBaseAccessService = roomDataBaseAccessService;
     }
 
     private static BedGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -53,7 +64,26 @@ public class BedDataBaseAccessService implements BedDao {
     }
 
     @Override
-    public void insertBed(BedDTO bed) {
+    public void insertBed(BedDTO bed) throws SQLException {
+
+        LocalDateTime date = LocalDateTime.now();
+
+        UUID patientId = bed.getPatientId();
+        UUID roomId = bed.getRoomId();
+
+        Optional<PatientGetDTO> patientFromDB = patientDataBaseAccessService.selectPatientById(patientId);
+        Optional<RoomGetDTO> roomFromDB = roomDataBaseAccessService.selectRoomById(roomId);
+
+        if(patientFromDB.isPresent() && roomFromDB.isPresent()) {
+            jdbcTemplate.update(sqlInsertBed,
+                    bed.getNumber(),
+                    bed.getPatientId(),
+                    bed.getRoomId(),
+                    date,
+                    date);
+        } else {
+            throw new SQLException("can not insert bed with patient ID: " + patientId + ", and room ID: " + roomId);
+        }
     }
 
 
@@ -65,6 +95,8 @@ public class BedDataBaseAccessService implements BedDao {
 
     @Override
     public void deleteBedById(UUID id) {
+        Object[] args = new Object[]{id};
+        jdbcTemplate.update(sqlDeleteBed, args);
     }
 
     @Override
@@ -80,7 +112,7 @@ public class BedDataBaseAccessService implements BedDao {
                 sqlSelectBedByID,
                 new Object[]{id},
                 BedDataBaseAccessService::mapRow);
-        return Optional.ofNullable(BedGetDTO.builder().build());
+        return Optional.ofNullable(bed);
     }
 
 

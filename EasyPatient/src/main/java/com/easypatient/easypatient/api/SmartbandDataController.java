@@ -26,7 +26,7 @@ public class SmartbandDataController {
     }
 
     @PostMapping
-    public void addSmartbandData(@Valid @NonNull @RequestBody SmartbandDataDTO smartbandData) {
+    public void addSmartbandData(@Valid @NonNull @RequestBody SmartbandDataDTO smartbandData) throws SQLException {
         smartbandDataService.addSmartbandData(smartbandData);
     }
 

@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SmartbandDataDao {
-    void insertSmartbandData(SmartbandDataDTO smartbandData);
+    void insertSmartbandData(SmartbandDataDTO smartbandData) throws SQLException;
 
     List<SmartbandDataGetDTO> selectAllSmartbandDatas();
 
