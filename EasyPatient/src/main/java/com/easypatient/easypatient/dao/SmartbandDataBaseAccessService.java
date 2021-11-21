@@ -30,7 +30,7 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
     final String sqlDeleteSmartband = "DELETE FROM smartband WHERE id = ?";
-
+    final String sqlUpdateSmartbandById = "UPDATE smartband SET mac = ?, name = ?, updated_at = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -81,6 +81,27 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
     public void updateSmartbandById(UUID id,
                                     Optional<String> mac,
                                     Optional<String> name) throws SQLException {
+        Optional<SmartbandGetDTO> existingSmartbandOptional = selectSmartbandById(id);
+        SmartbandGetDTO existingSmartband;
+        String macToUpdate;
+        String nameToUpdate;
+        LocalDateTime updatedAtToUpdate;
+
+        if(existingSmartbandOptional.isPresent()) {
+            existingSmartband = existingSmartbandOptional.get();
+        } else {
+            throw new SQLException("Smartband with ID: " + id + "doesn't exist.");
+        }
+
+        macToUpdate = mac.orElseGet(existingSmartband::getMac);
+        nameToUpdate = name.orElseGet(existingSmartband::getName);
+        updatedAtToUpdate = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlUpdateSmartbandById,
+                macToUpdate,
+                nameToUpdate,
+                updatedAtToUpdate,
+                id);
     }
 
     @Override

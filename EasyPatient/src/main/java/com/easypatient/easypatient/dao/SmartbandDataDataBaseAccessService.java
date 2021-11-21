@@ -107,21 +107,19 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
     }
 
     @Override
-    public List<SmartbandDataGetDTO> selectSmartbandDataByPatientId(UUID patientId) throws SQLException {
-        SmartbandDataGetDTO smartbandData = jdbcTemplate.queryForObject(
+    public List<SmartbandDataGetDTO> selectSmartbandDataByPatientId(UUID patientId) {
+        return jdbcTemplate.query(
                 sqlSelectSmartbandDataByPatientId,
                 new Object[]{patientId},
                 SmartbandDataDataBaseAccessService::mapRow);
-        return List.of();
     }
 
     @Override
-    public List<SmartbandDataGetDTO> selectSmartbandDataBySmartbandId(UUID smartbandId) throws SQLException {
-        SmartbandDataGetDTO smartbandData = jdbcTemplate.queryForObject(
+    public List<SmartbandDataGetDTO> selectSmartbandDataBySmartbandId(UUID smartbandId) {
+        return jdbcTemplate.query(
                 sqlSelectSmartbandDataBySmartbandId,
                 new Object[]{smartbandId},
                 SmartbandDataDataBaseAccessService::mapRow);
-        return List.of();
     }
 
     @Override

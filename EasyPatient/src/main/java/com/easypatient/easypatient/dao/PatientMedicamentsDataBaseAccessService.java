@@ -83,20 +83,18 @@ public class PatientMedicamentsDataBaseAccessService implements PatientMedicamen
     }
 
     @Override
-    public List<PatientMedicamentsGetDTO> selectPatientMedicamentsByPatientId(UUID patientId) throws SQLException {
-        PatientMedicamentsGetDTO patientMedicament = jdbcTemplate.queryForObject(
+    public List<PatientMedicamentsGetDTO> selectPatientMedicamentsByPatientId(UUID patientId) {
+        return jdbcTemplate.query(
                 sqlSelectPatientMedicamentsByPatientId,
                 new Object[]{patientId},
                 PatientMedicamentsDataBaseAccessService::mapRow);
-        return List.of();
     }
 
     @Override
-    public List<PatientMedicamentsGetDTO> selectPatientMedicamentsByMedicamentsId(UUID medicamentsId) throws SQLException {
-        PatientMedicamentsGetDTO patientMedicament = jdbcTemplate.queryForObject(
+    public List<PatientMedicamentsGetDTO> selectPatientMedicamentsByMedicamentsId(UUID medicamentsId) {
+        return jdbcTemplate.query(
                 sqlSelectPatientMedicamentsByMedicamentsId,
                 new Object[]{medicamentsId},
                 PatientMedicamentsDataBaseAccessService::mapRow);
-        return List.of();
     }
 }

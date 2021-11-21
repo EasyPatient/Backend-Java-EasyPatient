@@ -30,7 +30,7 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
     final String sqlUpdatedAt = " (updated_at = ?)";
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
-
+    final String sqlUpdateMedicamentsById = "UPDATE medicaments SET name = ?, type = ?, value = ?, updated_at = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -85,6 +85,30 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
                                       Optional<String> name,
                                       Optional<String> type,
                                       Optional<String> value) throws SQLException {
+        Optional<MedicamentsGetDTO> existingMedicamentsOptional = selectMedicamentsById(id);
+        MedicamentsGetDTO existingMedicaments;
+        String nameToUpdate;
+        String typeToUpdate;
+        String valueToUpdate;
+        LocalDateTime updatedAtToUpdate;
+
+        if(existingMedicamentsOptional.isPresent()) {
+            existingMedicaments = existingMedicamentsOptional.get();
+        } else {
+            throw new SQLException("Medicaments with ID: " + id + "don't exist.");
+        }
+
+        nameToUpdate = name.orElseGet(existingMedicaments::getName);
+        typeToUpdate = type.orElseGet(existingMedicaments::getType);
+        valueToUpdate = value.orElseGet(existingMedicaments::getValue);
+        updatedAtToUpdate = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlUpdateMedicamentsById,
+                nameToUpdate,
+                typeToUpdate,
+                valueToUpdate,
+                updatedAtToUpdate,
+                id);
     }
 
     @Override

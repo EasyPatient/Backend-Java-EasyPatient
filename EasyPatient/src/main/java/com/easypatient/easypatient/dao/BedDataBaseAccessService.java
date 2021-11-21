@@ -30,8 +30,7 @@ public class BedDataBaseAccessService implements BedDao {
     final String sqlSemicolon = ";";
     final String sqlInsertBed = "INSERT INTO bed VALUES(?, ?, ?, ?, ?)";
     final String sqlDeleteBed = "DELETE FROM bed WHERE id = ?";
-
-
+    final String sqlUpdateBedById = "UPDATE  bed SET number = ?, patientId = ?, roomId = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final PatientDataBaseAccessService patientDataBaseAccessService;
@@ -104,6 +103,29 @@ public class BedDataBaseAccessService implements BedDao {
                               Optional<Integer> number,
                               Optional<UUID> patientId,
                               Optional<UUID> roomId) throws SQLException {
+        Optional<BedGetDTO> existingBedOptional = selectBedById(id);
+        BedGetDTO existingBed;
+        int numberToUpdate;
+        UUID patientIdToUpdate;
+        UUID roomIdToUpdate;
+        LocalDateTime updatedAtToUpdate;
+
+        if(existingBedOptional.isPresent()) {
+            existingBed = existingBedOptional.get();
+        } else {
+            throw new SQLException("Bed with ID: " + id + "does not exist.");
+        }
+        numberToUpdate = number.orElseGet(existingBed::getNumber);
+        patientIdToUpdate = patientId.orElseGet(existingBed::getPatientId);
+        roomIdToUpdate = roomId.orElseGet(existingBed::getRoomId);
+        updatedAtToUpdate = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlUpdateBedById,
+                numberToUpdate,
+                patientIdToUpdate,
+                roomIdToUpdate,
+                updatedAtToUpdate,
+                id);
     }
 
     @Override
