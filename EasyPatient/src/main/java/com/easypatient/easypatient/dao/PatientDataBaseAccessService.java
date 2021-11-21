@@ -20,12 +20,13 @@ public class PatientDataBaseAccessService implements PatientDao {
     final String sqlSelectAllPeople = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient";
     final String sqlSelectPatientByID = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE id = ?";
     final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE ";
-    final String sqlName = " name = ?";
-    final String sqlAge = " AND age = ?";
-    final String sqlBed = " AND bed_id = ?";
-    final String sqlArrivedAt = " AND arrived_at = ?";
-    final String sqlCreatedAt = " AND created_at = ?";
-    final String sqlUpdatedAt = " AND updated_at = ?";
+    final String sqlName = " (name = ?)";
+    final String sqlAge = " (age = ?)";
+    final String sqlBed = " (bed_id = ?)";
+    final String sqlArrivedAt = " (arrived_at = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
     final String sqlInsertPatient = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?)";
     final String sqlDeletePatient = "DELETE FROM patient WHERE id = ?";
@@ -138,36 +139,44 @@ public class PatientDataBaseAccessService implements PatientDao {
 
         List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectPatientByVariable));
 
-        String sql = sqlSelectPatientByVariable;
         if(name.isPresent()) {
             i++;
-            sql.concat(sqlName);
             expressions.add(sqlName);
         }
         if(age.isPresent()) {
             i++;
-            sql.concat(sqlAge);
             expressions.add(sqlAge);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
         }
         if(bedId.isPresent()) {
             i++;
-            sql.concat(sqlBed);
             expressions.add(sqlBed);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
         }
         if(arrivedAt.isPresent()) {
             i++;
-            sql.concat(sqlArrivedAt);
             expressions.add(sqlArrivedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
         }
         if(createdAt.isPresent()) {
             i++;
-            sql.concat(sqlCreatedAt);
             expressions.add(sqlCreatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
         }
         if(updatedAt.isPresent()) {
             i++;
-            sql.concat(sqlUpdatedAt);
             expressions.add(sqlUpdatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
         }
 
         expressions.add(sqlSemicolon);
