@@ -20,7 +20,7 @@ public class PatientMedicamentsService {
         this.patientMedicamentsDao = patientMedicamentsDao;
     }
 
-    public void addPatientMedicaments(PatientMedicamentsDTO patientMedicaments) {
+    public void addPatientMedicaments(PatientMedicamentsDTO patientMedicaments) throws SQLException {
         patientMedicamentsDao.insertPatientMedicaments(patientMedicaments);
     }
 

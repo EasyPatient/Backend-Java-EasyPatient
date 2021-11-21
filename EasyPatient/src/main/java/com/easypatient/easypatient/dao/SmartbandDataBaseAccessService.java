@@ -29,6 +29,8 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
     final String sqlUpdatedAt = " (updated_at = ?)";
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
+    final String sqlDeleteSmartband = "DELETE FROM smartband WHERE id = ?";
+
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -71,6 +73,8 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
 
     @Override
     public void deleteSmartbandById(UUID smartbandId) {
+        Object[] args = new Object[]{smartbandId};
+        jdbcTemplate.update(sqlDeleteSmartband, args);
     }
 
     @Override
@@ -85,7 +89,7 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
                 sqlSelectSmartbandByID,
                 new Object[]{id},
                 SmartbandDataBaseAccessService::mapRow);
-        return Optional.ofNullable(SmartbandGetDTO.builder().build());
+        return Optional.ofNullable(smartband);
     }
 
     @Override

@@ -21,6 +21,7 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
     final String sqlSelectAllMedicaments = "SELECT id, name, type, value, created_at, updated_at FROM medicaments";
     final String sqlSelectMedicamentsByID = "SELECT id, name, type, value, created_at, updated_at FROM medicaments WHERE id = ?";
     final String sqlInsertMedicaments = "INSERT INTO medicaments VALUES(?, ?, ?, ?, ?)";
+    final String sqlDeleteMedicaments = "DELETE FROM medicaments WHERE id = ?";
     final String sqlSelectMedicamentsByVariable = "SELECT name, type, value, created_at, updated_at FROM medicaments WHERE ";
     final String sqlName = " (name = ?)";
     final String sqlType = " (type = ?)";
@@ -75,6 +76,8 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
 
     @Override
     public void deleteMedicamentsById(UUID id) {
+        Object[] args = new Object[]{id};
+        jdbcTemplate.update(sqlDeleteMedicaments, args);
     }
 
     @Override
@@ -90,7 +93,7 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
                 sqlSelectMedicamentsByID,
                 new Object[]{id},
                 MedicamentsDataBaseAccessService::mapRow);
-        return Optional.ofNullable(MedicamentsGetDTO.builder().build());
+        return Optional.ofNullable(medicaments);
     }
 
     @Override

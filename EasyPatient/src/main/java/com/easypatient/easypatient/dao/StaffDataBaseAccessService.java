@@ -31,6 +31,8 @@ public class StaffDataBaseAccessService implements StaffDao {
     final String sqlRole = " (role = ?)";
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
+    final String sqlDeleteStaff = "DELETE FROM staff WHERE id = ?";
+
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -86,6 +88,8 @@ public class StaffDataBaseAccessService implements StaffDao {
 
     @Override
     public void deleteStaffById(UUID id) {
+        Object[] args = new Object[]{id};
+        jdbcTemplate.update(sqlDeleteStaff, args);
     }
 
     @Override
@@ -104,7 +108,7 @@ public class StaffDataBaseAccessService implements StaffDao {
                 sqlSelectStaffByID,
                 new Object[]{id},
                 StaffDataBaseAccessService::mapRow);
-        return Optional.ofNullable(StaffGetDTO.builder().build());
+        return Optional.ofNullable(staff);
     }
 
     @Override

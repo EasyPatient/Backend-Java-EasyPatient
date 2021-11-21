@@ -1,8 +1,6 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.dto.SmartbandDataDTO;
-import com.easypatient.easypatient.dto.SmartbandDataGetDTO;
-import com.easypatient.easypatient.dto.SmartbandGetDTO;
+import com.easypatient.easypatient.dto.*;
 import com.easypatient.easypatient.model.Smartband;
 import com.easypatient.easypatient.model.SmartbandData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +32,20 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
     final String sqlUpdatedAt = " (updated_at = ?)";
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
+    final String sqlDeleteSmartbandData = "DELETE FROM smartband_data WHERE smartband_id = ? AND patient_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
+    private final PatientDataBaseAccessService patientDataBaseAccessService;
+    private final SmartbandDataBaseAccessService smartbandDataBaseAccessService;
 
     @Autowired
-    public SmartbandDataDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+    public SmartbandDataDataBaseAccessService(JdbcTemplate jdbcTemplate,
+                                              PatientDataBaseAccessService patientDataBaseAccessService,
+                                              SmartbandDataBaseAccessService smartbandDataBaseAccessService
+                                              ) {
         this.jdbcTemplate = jdbcTemplate;
+        this.patientDataBaseAccessService = patientDataBaseAccessService;
+        this.smartbandDataBaseAccessService = smartbandDataBaseAccessService;
     }
 
     private static SmartbandDataGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -64,8 +70,28 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
     }
 
     @Override
-    public void insertSmartbandData(SmartbandDataDTO smartbandData) {
+    public void insertSmartbandData(SmartbandDataDTO smartbandData) throws SQLException {
+        LocalDateTime date = LocalDateTime.now();
 
+        UUID patientId = smartbandData.getPatientId();
+        UUID smartbandId = smartbandData.getSmartbandId();
+
+        Optional<PatientGetDTO> patientFromDB = patientDataBaseAccessService.selectPatientById(patientId);
+        Optional<SmartbandGetDTO> smartbandFromDB = smartbandDataBaseAccessService.selectSmartbandById(smartbandId);
+
+        if(patientFromDB.isPresent() && smartbandFromDB.isPresent()) {
+            jdbcTemplate.update(sqlInsertSmartbandData,
+                    smartbandData.getSmartbandId(),
+                    smartbandData.getPatientId(),
+                    smartbandData.getHeartRate(),
+                    smartbandData.getOxygen(),
+                    smartbandData.getTemperature(),
+                    smartbandData.getBattery(),
+                    date,
+                    date);
+        } else {
+            throw new SQLException("can not insert smartband data with patient ID: " + patientId + ", and smartband ID: " + smartbandId);
+        }
     }
 
     @Override
@@ -76,6 +102,8 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
 
     @Override
     public void deleteSmartbandDataByIds(UUID smartbandId, UUID patientId) {
+        Object[] args = new Object[]{smartbandId, patientId};
+        jdbcTemplate.update(sqlDeleteSmartbandData, args);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class StaffPatientService {
         this.staffPatientDao = staffPatientDao;
     }
 
-    public void addStaffPatient(StaffPatientDTO staffPatient) {
+    public void addStaffPatient(StaffPatientDTO staffPatient) throws SQLException {
         staffPatientDao.insertStaffPatient(staffPatient);
     }
 

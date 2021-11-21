@@ -28,6 +28,7 @@ public class RoomDataBaseAccessService implements RoomDao {
     final String sqlUpdatedAt = " (updated_at = ?)";
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
+    final String sqlDeleteRoom = "DELETE FROM room WHERE id = ?";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -72,6 +73,8 @@ public class RoomDataBaseAccessService implements RoomDao {
 
     @Override
     public void deleteRoomById(UUID id) {
+        Object[] args = new Object[]{id};
+        jdbcTemplate.update(sqlDeleteRoom, args);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class RoomDataBaseAccessService implements RoomDao {
                 sqlSelectRoomByID,
                 new Object[]{id},
                 RoomDataBaseAccessService::mapRow);
-        return Optional.ofNullable(RoomGetDTO.builder().build());
+        return Optional.ofNullable(room);
     }
 
     @Override

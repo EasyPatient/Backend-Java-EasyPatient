@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BedDao {
-    void insertBed(BedDTO bed);
+    void insertBed(BedDTO bed) throws SQLException;
 
     List<BedGetDTO> selectAllBeds();
 

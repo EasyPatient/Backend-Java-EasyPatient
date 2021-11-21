@@ -1,8 +1,6 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.dto.PatientGetDTO;
-import com.easypatient.easypatient.dto.PatientMedicamentsDTO;
-import com.easypatient.easypatient.dto.PatientMedicamentsGetDTO;
+import com.easypatient.easypatient.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository("PatientMedicamentsPostgres")
@@ -19,12 +18,21 @@ public class PatientMedicamentsDataBaseAccessService implements PatientMedicamen
     final String sqlSelectAllPatientMedicaments = "SELECT patient_id, medicaments_id, created_at, updated_at FROM patient_medicaments";
     final String sqlSelectPatientMedicamentsByPatientId = "SELECT patient_id, medicaments_id, created_at, updated_at FROM patient_medicaments WHERE patient_id = ?";
     final String sqlSelectPatientMedicamentsByMedicamentsId = "SELECT patient_id, medicaments_id, created_at, updated_at FROM patient_medicaments WHERE medicaments_id = ?";
+    final String sqlInsertPatientMedicaments = "INSERT INTO patient_medicaments VALUES(?, ?, ?, ?)";
+    final String sqlDeletePatientMedicaments = "DELETE FROM patient_medicaments WHERE patient_id = ? AND medicaments_id = ?";
+
 
     private final JdbcTemplate jdbcTemplate;
+    private final PatientDataBaseAccessService patientDataBaseAccessService;
+    private final MedicamentsDataBaseAccessService medicamentsDataBaseAccessService;
 
     @Autowired
-    public PatientMedicamentsDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+    public PatientMedicamentsDataBaseAccessService(JdbcTemplate jdbcTemplate,
+                                                   PatientDataBaseAccessService patientDataBaseAccessService,
+                                                   MedicamentsDataBaseAccessService medicamentsDataBaseAccessService) {
         this.jdbcTemplate = jdbcTemplate;
+        this.patientDataBaseAccessService = patientDataBaseAccessService;
+        this.medicamentsDataBaseAccessService = medicamentsDataBaseAccessService;
     }
 
     private static PatientMedicamentsGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -41,7 +49,25 @@ public class PatientMedicamentsDataBaseAccessService implements PatientMedicamen
     }
 
     @Override
-    public void insertPatientMedicaments(PatientMedicamentsDTO patientMedicaments) {
+    public void insertPatientMedicaments(PatientMedicamentsDTO patientMedicaments) throws SQLException {
+
+        LocalDateTime date = LocalDateTime.now();
+
+        UUID patientId = patientMedicaments.getPatientId();
+        UUID medicamentsId = patientMedicaments.getMedicamentsId();
+
+        Optional<PatientGetDTO> patientFromDB = patientDataBaseAccessService.selectPatientById(patientId);
+        Optional<MedicamentsGetDTO> medicamentsFromDB = medicamentsDataBaseAccessService.selectMedicamentsById(medicamentsId);
+
+        if(patientFromDB.isPresent() && medicamentsFromDB.isPresent()) {
+            jdbcTemplate.update(sqlInsertPatientMedicaments,
+                    patientMedicaments.getPatientId(),
+                    patientMedicaments.getMedicamentsId(),
+                    date,
+                    date);
+        } else {
+            throw new SQLException("can not insert patient Medicaments with patient ID: " + patientId + ", and medicament ID: " + medicamentsId);
+        }
     }
 
     @Override
@@ -52,6 +78,8 @@ public class PatientMedicamentsDataBaseAccessService implements PatientMedicamen
 
     @Override
     public void deletePatientMedicamentsByIds(UUID patientId, UUID medicamentsId) {
+        Object[] args = new Object[]{patientId, medicamentsId};
+        jdbcTemplate.update(sqlDeletePatientMedicaments, args);
     }
 
     @Override
