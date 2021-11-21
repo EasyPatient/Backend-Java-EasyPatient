@@ -1,5 +1,6 @@
 package com.easypatient.easypatient.api;
 
+import com.easypatient.easypatient.dto.PatientGetDTO;
 import com.easypatient.easypatient.dto.SmartbandDataDTO;
 import com.easypatient.easypatient.dto.SmartbandDataGetDTO;
 import com.easypatient.easypatient.service.SmartbandDataService;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequestMapping("api/v1/smartbandData")
@@ -45,5 +48,24 @@ public class SmartbandDataController {
     @DeleteMapping(path = "{patientId}/{smartbandId}")
     public void deleteSmartbandDataByIds(@PathVariable("patientId") UUID patientId, @PathVariable("smartbandId") UUID smartbandId) {
         smartbandDataService.deleteSmartbandData(patientId, smartbandId);
+    }
+
+    @GetMapping(path = "/getByVariables")
+    public List<SmartbandDataGetDTO> getSmartbandDataByVariables(@RequestParam(required = false) Optional<UUID> smartbandId,
+                                                      @RequestParam(required = false) Optional<UUID> patientId,
+                                                      @RequestParam(required = false) Optional<String> heartRate,
+                                                      @RequestParam(required = false) Optional<String> oxygen,
+                                                      @RequestParam(required = false) Optional<String> temperature,
+                                                      @RequestParam(required = false) Optional<String> battery,
+                                                      @RequestParam(required = false) Optional<LocalDateTime> createdAt,
+                                                      @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
+        return smartbandDataService.getSmartbandDataByVariables(smartbandId,
+                patientId,
+                heartRate,
+                oxygen,
+                temperature,
+                battery,
+                createdAt,
+                updatedAt);
     }
 }

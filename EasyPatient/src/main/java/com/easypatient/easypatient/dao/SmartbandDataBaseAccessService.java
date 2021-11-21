@@ -22,6 +22,13 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
     final String sqlSelectAllSmartband = "SELECT id, mac, name, created_at, updated_at FROM smartband";
     final String sqlSelectSmartbandByID = "SELECT id, mac, name, created_at, updated_at FROM smartband WHERE id = ?";
     final String sqlInsertSmartband = "INSERT INTO smartband VALUES(?, ?, ?, ?)";
+    final String sqlSelectSmartbandByVariable = "SELECT mac, name, created_at, updated_at FROM smartband WHERE ";
+    final String sqlMac = " (mac = ?)";
+    final String sqlName = " (name = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
+    final String sqlSemicolon = ";";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -86,6 +93,64 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
                                                             Optional<String> name,
                                                             Optional<LocalDateTime> createdAt,
                                                             Optional<LocalDateTime> updatedAt) throws SQLException {
-        return List.of();
+        int i = 0;
+        int k = 0;
+
+        List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectSmartbandByVariable));
+
+        if(mac.isPresent()) {
+            i++;
+            expressions.add(sqlMac);
+        }
+        if(name.isPresent()) {
+            i++;
+            expressions.add(sqlName);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(createdAt.isPresent()) {
+            i++;
+            expressions.add(sqlCreatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(updatedAt.isPresent()) {
+            i++;
+            expressions.add(sqlUpdatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+
+        expressions.add(sqlSemicolon);
+        String sqlExpression = String.join(" ", expressions);
+
+        if(i != 0) {
+            Object[] jdbcTable = new Object[i];
+            if(mac.isPresent()) {
+                jdbcTable[k] = mac.get();
+                k++;
+            }
+            if(name.isPresent()) {
+                jdbcTable[k] = name.get();
+                k++;
+            }
+            if(createdAt.isPresent()) {
+                jdbcTable[k] = createdAt.get();
+                k++;
+            }
+            if(updatedAt.isPresent()) {
+                jdbcTable[k] = updatedAt.get();
+                k++;
+            }
+            return jdbcTemplate.query(
+                    sqlExpression,
+                    jdbcTable,
+                    SmartbandDataBaseAccessService::mapRow);
+        } else {
+            throw new SQLException("can not query without any parameters!");
+        }
     }
 }

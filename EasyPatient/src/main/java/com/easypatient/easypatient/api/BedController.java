@@ -2,8 +2,6 @@ package com.easypatient.easypatient.api;
 
 import com.easypatient.easypatient.dto.BedDTO;
 import com.easypatient.easypatient.dto.BedGetDTO;
-import com.easypatient.easypatient.dto.PatientGetDTO;
-import com.easypatient.easypatient.model.Bed;
 import com.easypatient.easypatient.service.BedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;

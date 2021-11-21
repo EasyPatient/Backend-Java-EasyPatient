@@ -21,6 +21,14 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
     final String sqlSelectAllMedicaments = "SELECT id, name, type, value, created_at, updated_at FROM medicaments";
     final String sqlSelectMedicamentsByID = "SELECT id, name, type, value, created_at, updated_at FROM medicaments WHERE id = ?";
     final String sqlInsertMedicaments = "INSERT INTO medicaments VALUES(?, ?, ?, ?, ?)";
+    final String sqlSelectMedicamentsByVariable = "SELECT name, type, value, created_at, updated_at FROM medicaments WHERE ";
+    final String sqlName = " (name = ?)";
+    final String sqlType = " (type = ?)";
+    final String sqlValue = " (value = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
+    final String sqlSemicolon = ";";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -91,7 +99,76 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
                                                                 Optional<String> value,
                                                                 Optional<LocalDateTime> createdAt,
                                                                 Optional<LocalDateTime> updatedAt) throws SQLException {
-        return List.of();
+        int i = 0;
+        int k = 0;
+
+        List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectMedicamentsByVariable));
+
+        if(name.isPresent()) {
+            i++;
+            expressions.add(sqlName);
+        }
+        if(type.isPresent()) {
+            i++;
+            expressions.add(sqlType);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(value.isPresent()) {
+            i++;
+            expressions.add(sqlValue);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(createdAt.isPresent()) {
+            i++;
+            expressions.add(sqlCreatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(updatedAt.isPresent()) {
+            i++;
+            expressions.add(sqlUpdatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+
+        expressions.add(sqlSemicolon);
+        String sqlExpression = String.join(" ", expressions);
+
+        if(i != 0) {
+            Object[] jdbcTable = new Object[i];
+            if(name.isPresent()) {
+                jdbcTable[k] = name.get();
+                k++;
+            }
+            if(type.isPresent()) {
+                jdbcTable[k] = type.get();
+                k++;
+            }
+            if(value.isPresent()) {
+                jdbcTable[k] = value.get();
+                k++;
+            }
+            if(createdAt.isPresent()) {
+                jdbcTable[k] = createdAt.get();
+                k++;
+            }
+            if(updatedAt.isPresent()) {
+                jdbcTable[k] = updatedAt.get();
+                k++;
+            }
+            return jdbcTemplate.query(
+                    sqlExpression,
+                    jdbcTable,
+                    MedicamentsDataBaseAccessService::mapRow);
+        } else {
+            throw new SQLException("can not query without any parameters!");
+        }
     }
 
 }

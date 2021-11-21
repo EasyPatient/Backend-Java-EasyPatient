@@ -6,9 +6,12 @@ import com.easypatient.easypatient.dto.SmartbandDataGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,6 +43,23 @@ public class SmartbandDataService {
         smartbandDataDao.deleteSmartbandDataByIds(smartbandId, patientId);
     }
 
+    public List<SmartbandDataGetDTO> getSmartbandDataByVariables(Optional<UUID> smartbandId,
+                                                                 Optional<UUID> patientId,
+                                                                 Optional<String> heartRate,
+                                                                 Optional<String> oxygen,
+                                                                 Optional<String> temperature,
+                                                                 Optional<String> battery,
+                                                                 Optional<LocalDateTime> createdAt,
+                                                                 Optional<LocalDateTime> updatedAt) throws SQLException {
+        return smartbandDataDao.selectSmartbandDataByVariable(smartbandId,
+                patientId,
+                heartRate,
+                oxygen,
+                temperature,
+                battery,
+                createdAt,
+                updatedAt);
+    }
 
 
 
