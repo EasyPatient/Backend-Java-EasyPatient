@@ -17,6 +17,8 @@ import java.util.UUID;
 public class PatientMedicamentsDataBaseAccessService implements PatientMedicamentsDao {
 
     final String sqlSelectAllPatientMedicaments = "SELECT patient_id, medicaments_id, created_at, updated_at FROM patient_medicaments";
+    final String sqlSelectPatientMedicamentsByPatientId = "SELECT patient_id, medicaments_id, created_at, updated_at FROM patient_medicaments WHERE patient_id = ?";
+    final String sqlSelectPatientMedicamentsByMedicamentsId = "SELECT patient_id, medicaments_id, created_at, updated_at FROM patient_medicaments WHERE medicaments_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -54,11 +56,19 @@ public class PatientMedicamentsDataBaseAccessService implements PatientMedicamen
 
     @Override
     public List<PatientMedicamentsGetDTO> selectPatientMedicamentsByPatientId(UUID patientId) throws SQLException {
+        PatientMedicamentsGetDTO patientMedicament = jdbcTemplate.queryForObject(
+                sqlSelectPatientMedicamentsByPatientId,
+                new Object[]{patientId},
+                PatientMedicamentsDataBaseAccessService::mapRow);
         return List.of();
     }
 
     @Override
     public List<PatientMedicamentsGetDTO> selectPatientMedicamentsByMedicamentsId(UUID medicamentsId) throws SQLException {
+        PatientMedicamentsGetDTO patientMedicament = jdbcTemplate.queryForObject(
+                sqlSelectPatientMedicamentsByMedicamentsId,
+                new Object[]{medicamentsId},
+                PatientMedicamentsDataBaseAccessService::mapRow);
         return List.of();
     }
 }

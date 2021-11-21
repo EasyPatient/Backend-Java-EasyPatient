@@ -19,6 +19,8 @@ import java.util.UUID;
 public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
 
     final String sqlSelectAllSmartbandDatas = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data";
+    final String sqlSelectSmartbandDataByPatientId = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE patient_id = ?";
+    final String sqlSelectSmartbandDataBySmartbandId = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE smartband_id = ?";
     final String sqlInsertSmartbandData = "INSERT INTO smartband_data VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
@@ -51,17 +53,7 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
 
     @Override
     public void insertSmartbandData(SmartbandDataDTO smartbandData) {
-        LocalDateTime date = LocalDateTime.now();
 
-        jdbcTemplate.update(sqlInsertSmartbandData,
-                smartbandData.getSmartbandId(),
-                smartbandData.getPatientId(),
-                smartbandData.getHeartRate(),
-                smartbandData.getOxygen(),
-                smartbandData.getTemperature(),
-                smartbandData.getBattery(),
-                date,
-                date);
     }
 
     @Override
@@ -76,11 +68,19 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
 
     @Override
     public List<SmartbandDataGetDTO> selectSmartbandDataByPatientId(UUID patientId) throws SQLException {
+        SmartbandDataGetDTO smartbandData = jdbcTemplate.queryForObject(
+                sqlSelectSmartbandDataByPatientId,
+                new Object[]{patientId},
+                SmartbandDataDataBaseAccessService::mapRow);
         return List.of();
     }
 
     @Override
     public List<SmartbandDataGetDTO> selectSmartbandDataBySmartbandId(UUID smartbandId) throws SQLException {
+        SmartbandDataGetDTO smartbandData = jdbcTemplate.queryForObject(
+                sqlSelectSmartbandDataBySmartbandId,
+                new Object[]{smartbandId},
+                SmartbandDataDataBaseAccessService::mapRow);
         return List.of();
     }
 

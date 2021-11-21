@@ -19,6 +19,7 @@ import java.util.UUID;
 public class RoomDataBaseAccessService implements RoomDao {
 
     final String sqlSelectAllRooms = "SELECT id, number, name, created_at, updated_at FROM room";
+    final String sqlSelectRoomByID = "SELECT id, number, name, created_at, updated_at FROM room WHERE id = ?";
     final String sqlInsertRoom = "INSERT INTO room VALUES(?, ?, ?, ?)";
 
 
@@ -74,6 +75,10 @@ public class RoomDataBaseAccessService implements RoomDao {
 
     @Override
     public Optional<RoomGetDTO> selectRoomById(UUID id) {
+        RoomGetDTO room = jdbcTemplate.queryForObject(
+                sqlSelectRoomByID,
+                new Object[]{id},
+                RoomDataBaseAccessService::mapRow);
         return Optional.ofNullable(RoomGetDTO.builder().build());
     }
 
