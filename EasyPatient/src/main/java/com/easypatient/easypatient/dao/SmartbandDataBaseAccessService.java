@@ -22,6 +22,13 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
     final String sqlSelectAllSmartband = "SELECT id, mac, name, created_at, updated_at FROM smartband";
     final String sqlSelectSmartbandByID = "SELECT id, mac, name, created_at, updated_at FROM smartband WHERE id = ?";
     final String sqlInsertSmartband = "INSERT INTO smartband VALUES(?, ?, ?, ?)";
+    final String sqlSelectSmartbandByVariable = "SELECT mac, name, created_at, updated_at FROM smartband WHERE ";
+    final String sqlMac = " (mac = ?)";
+    final String sqlName = " (name = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
+    final String sqlSemicolon = ";";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -88,13 +95,6 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
                                                             Optional<LocalDateTime> updatedAt) throws SQLException {
         int i = 0;
         int k = 0;
-        final String sqlSelectSmartbandByVariable = "SELECT mac, name, created_at, updated_at FROM smartband WHERE ";
-        final String sqlMac = " (mac = ?)";
-        final String sqlName = " (name = ?)";
-        final String sqlCreatedAt = " (created_at = ?)";
-        final String sqlUpdatedAt = " (updated_at = ?)";
-        final String sqlAnd = " AND ";
-        final String sqlSemicolon = ";";
 
         List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectSmartbandByVariable));
 

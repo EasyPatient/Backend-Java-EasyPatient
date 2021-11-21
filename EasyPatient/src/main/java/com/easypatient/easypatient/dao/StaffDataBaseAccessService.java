@@ -20,6 +20,17 @@ public class StaffDataBaseAccessService implements StaffDao {
     final String sqlSelectAllStaff = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff";
     final String sqlSelectStaffByID = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff WHERE id = ?";
     final String sqlInsertStaff = "INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+    final String sqlSelectStaffByVariable = "SELECT name, email, phone, phoneAreaCode, password, role, createdAt, updatedAt FROM staff WHERE ";
+    final String sqlEmail = " (email = ?)";
+    final String sqlName = " (name = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlPhone = " (phone = ?)";
+    final String sqlPhoneAreaCode = " (phoneAreaCode = ?)";
+    final String sqlPassword = " (password = ?)";
+    final String sqlRole = " (role = ?)";
+    final String sqlAnd = " AND ";
+    final String sqlSemicolon = ";";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -107,17 +118,6 @@ public class StaffDataBaseAccessService implements StaffDao {
                                                     Optional<LocalDateTime> updatedAt) throws SQLException {
         int i = 0;
         int k = 0;
-        final String sqlSelectStaffByVariable = "SELECT name, email, phone, phoneAreaCode, password, role, createdAt, updatedAt FROM staff WHERE ";
-        final String sqlEmail = " (email = ?)";
-        final String sqlName = " (name = ?)";
-        final String sqlCreatedAt = " (created_at = ?)";
-        final String sqlUpdatedAt = " (updated_at = ?)";
-        final String sqlPhone = " (phone = ?)";
-        final String sqlPhoneAreaCode = " (phoneAreaCode = ?)";
-        final String sqlPassword = " (password = ?)";
-        final String sqlRole = " (role = ?)";
-        final String sqlAnd = " AND ";
-        final String sqlSemicolon = ";";
 
         List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectStaffByVariable));
 

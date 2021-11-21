@@ -21,6 +21,13 @@ public class RoomDataBaseAccessService implements RoomDao {
     final String sqlSelectAllRooms = "SELECT id, number, name, created_at, updated_at FROM room";
     final String sqlSelectRoomByID = "SELECT id, number, name, created_at, updated_at FROM room WHERE id = ?";
     final String sqlInsertRoom = "INSERT INTO room VALUES(?, ?, ?, ?)";
+    final String sqlSelectRoomByVariable = "SELECT number, name, created_at, updated_at FROM room WHERE ";
+    final String sqlNumber = " (number = ?)";
+    final String sqlName = " (name = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
+    final String sqlSemicolon = ";";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -89,13 +96,6 @@ public class RoomDataBaseAccessService implements RoomDao {
                                                   Optional<LocalDateTime> updatedAt) throws SQLException {
         int i = 0;
         int k = 0;
-        final String sqlSelectRoomByVariable = "SELECT number, name, created_at, updated_at FROM room WHERE ";
-        final String sqlNumber = " (number = ?)";
-        final String sqlName = " (name = ?)";
-        final String sqlCreatedAt = " (created_at = ?)";
-        final String sqlUpdatedAt = " (updated_at = ?)";
-        final String sqlAnd = " AND ";
-        final String sqlSemicolon = ";";
 
         List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectRoomByVariable));
 
@@ -153,22 +153,5 @@ public class RoomDataBaseAccessService implements RoomDao {
         } else {
             throw new SQLException("can not query without any parameters!");
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

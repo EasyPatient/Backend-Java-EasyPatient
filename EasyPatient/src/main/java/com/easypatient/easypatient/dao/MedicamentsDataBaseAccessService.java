@@ -21,6 +21,14 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
     final String sqlSelectAllMedicaments = "SELECT id, name, type, value, created_at, updated_at FROM medicaments";
     final String sqlSelectMedicamentsByID = "SELECT id, name, type, value, created_at, updated_at FROM medicaments WHERE id = ?";
     final String sqlInsertMedicaments = "INSERT INTO medicaments VALUES(?, ?, ?, ?, ?)";
+    final String sqlSelectMedicamentsByVariable = "SELECT name, type, value, created_at, updated_at FROM medicaments WHERE ";
+    final String sqlName = " (name = ?)";
+    final String sqlType = " (type = ?)";
+    final String sqlValue = " (value = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
+    final String sqlSemicolon = ";";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -93,14 +101,6 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
                                                                 Optional<LocalDateTime> updatedAt) throws SQLException {
         int i = 0;
         int k = 0;
-        final String sqlSelectMedicamentsByVariable = "SELECT name, type, value, created_at, updated_at FROM medicaments WHERE ";
-        final String sqlName = " (name = ?)";
-        final String sqlType = " (type = ?)";
-        final String sqlValue = " (value = ?)";
-        final String sqlCreatedAt = " (created_at = ?)";
-        final String sqlUpdatedAt = " (updated_at = ?)";
-        final String sqlAnd = " AND ";
-        final String sqlSemicolon = ";";
 
         List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectMedicamentsByVariable));
 

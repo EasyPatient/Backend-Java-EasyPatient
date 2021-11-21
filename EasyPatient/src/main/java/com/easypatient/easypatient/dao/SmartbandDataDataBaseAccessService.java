@@ -23,6 +23,17 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
     final String sqlSelectSmartbandDataByPatientId = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE patient_id = ?";
     final String sqlSelectSmartbandDataBySmartbandId = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE smartband_id = ?";
     final String sqlInsertSmartbandData = "INSERT INTO smartband_data VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+    final String sqlSelectSmartbandDataByVariable = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE ";
+    final String sqlSmartbandId = " (smartband_id = ?)";
+    final String sqlPatientId = " (patient_id = ?)";
+    final String sqlHeartRate = " (heart_rate = ?)";
+    final String sqlOxygen = " (oxygen = ?)";
+    final String sqlTemperature = " (temperature = ?)";
+    final String sqlBattery = " (battery = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
+    final String sqlSemicolon = ";";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -96,17 +107,6 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
                                                                    Optional<LocalDateTime> updatedAt) throws SQLException {
         int i = 0;
         int k = 0;
-        final String sqlSelectSmartbandDataByVariable = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE ";
-        final String sqlSmartbandId = " (smartband_id = ?)";
-        final String sqlPatientId = " (patient_id = ?)";
-        final String sqlHeartRate = " (heart_rate = ?)";
-        final String sqlOxygen = " (oxygen = ?)";
-        final String sqlTemperature = " (temperature = ?)";
-        final String sqlBattery = " (battery = ?)";
-        final String sqlCreatedAt = " (created_at = ?)";
-        final String sqlUpdatedAt = " (updated_at = ?)";
-        final String sqlAnd = " AND ";
-        final String sqlSemicolon = ";";
 
         List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectSmartbandDataByVariable));
 

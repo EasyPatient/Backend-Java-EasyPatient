@@ -19,7 +19,14 @@ public class BedDataBaseAccessService implements BedDao {
 
     final String sqlSelectAllBeds = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed";
     final String sqlSelectBedByID = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed WHERE id = ?";
-
+    final String sqlSelectBedByVariable = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed WHERE ";
+    final String sqlNumber = " (number = ?)";
+    final String sqlPatientId = " (patient_id = ?)";
+    final String sqlRoomId = " (room_id = ?)";
+    final String sqlCreatedAt = " (created_at = ?)";
+    final String sqlUpdatedAt = " (updated_at = ?)";
+    final String sqlAnd = " AND ";
+    final String sqlSemicolon = ";";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -85,14 +92,6 @@ public class BedDataBaseAccessService implements BedDao {
                                                 Optional<LocalDateTime> createdAt) throws SQLException {
         int i = 0;
         int k = 0;
-        final String sqlSelectBedByVariable = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed WHERE ";
-        final String sqlNumber = " (number = ?)";
-        final String sqlPatientId = " (patient_id = ?)";
-        final String sqlRoomId = " (room_id = ?)";
-        final String sqlCreatedAt = " (created_at = ?)";
-        final String sqlUpdatedAt = " (updated_at = ?)";
-        final String sqlAnd = " AND ";
-        final String sqlSemicolon = ";";
 
         List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectBedByVariable));
 
@@ -161,34 +160,5 @@ public class BedDataBaseAccessService implements BedDao {
         } else {
             throw new SQLException("can not query without any parameters!");
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
