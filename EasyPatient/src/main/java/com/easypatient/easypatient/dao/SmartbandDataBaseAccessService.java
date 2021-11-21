@@ -19,7 +19,7 @@ import java.util.UUID;
 @Repository("SmartbandPostgres")
 public class SmartbandDataBaseAccessService implements SmartbandDao {
 
-    final String sqlSelectAllSmartbandData = "SELECT id, mac, name, created_at, updated_at FROM smartband_data";
+    final String sqlSelectAllSmartband = "SELECT id, mac, name, created_at, updated_at FROM smartband";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -49,7 +49,7 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
 
     @Override
     public List<SmartbandGetDTO> selectAllSmartbands() {
-        return jdbcTemplate.query(sqlSelectAllSmartbandData,
+        return jdbcTemplate.query(sqlSelectAllSmartband,
                 SmartbandDataBaseAccessService::mapRow);
     }
 
