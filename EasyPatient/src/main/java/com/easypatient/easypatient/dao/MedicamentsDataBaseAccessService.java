@@ -2,10 +2,12 @@ package com.easypatient.easypatient.dao;
 
 import com.easypatient.easypatient.dto.MedicamentsDTO;
 import com.easypatient.easypatient.dto.MedicamentsGetDTO;
+import com.easypatient.easypatient.dto.PatientGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Repository("MedicamentsPostgres")
 public class MedicamentsDataBaseAccessService implements MedicamentsDao{
 
+    final String sqlSelectAllMedicaments = "SELECT id, name, type, value, created_at, updated_at FROM medicaments";
     final String sqlInsertMedicaments = "INSERT INTO medicaments VALUES(?, ?, ?, ?, ?)";
 
 
@@ -25,6 +28,22 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    private static MedicamentsGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
+        UUID id = UUID.fromString(resultSet.getString("id"));
+        String name = resultSet.getString("name");
+        String type = resultSet.getString("type");
+        String value = resultSet.getString("value");
+        LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
+        LocalDateTime updatedAt = resultSet.getTimestamp("updated_at").toLocalDateTime();
+        return MedicamentsGetDTO.builder()
+                .id(id)
+                .name(name)
+                .type(type)
+                .value(value)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
 
     @Override
     public void insertMedicaments(MedicamentsDTO medicaments) {
@@ -40,7 +59,8 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
 
     @Override
     public List<MedicamentsGetDTO> selectAllMedicaments() {
-        return List.of();
+        return jdbcTemplate.query(sqlSelectAllMedicaments,
+                MedicamentsDataBaseAccessService::mapRow);
     }
 
     @Override
