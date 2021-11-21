@@ -1,7 +1,10 @@
 package com.easypatient.easypatient.dao;
 
+import com.easypatient.easypatient.dto.PatientDTO;
 import com.easypatient.easypatient.dto.RoomDTO;
 import com.easypatient.easypatient.dto.RoomGetDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -12,8 +15,25 @@ import java.util.UUID;
 
 @Repository("RoomPostgres")
 public class RoomDataBaseAccessService implements RoomDao {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public RoomDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+    final String sqlInsertRoom = "INSERT INTO room VALUES(?, ?, ?, ?)";
+
+
     @Override
     public void insertRoom(RoomDTO room) {
+        LocalDateTime date = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlInsertRoom,
+                room.getNumber(),
+                room.getName(),
+                date,
+                date);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.easypatient.easypatient.dao;
 
 import com.easypatient.easypatient.dto.MedicamentsDTO;
 import com.easypatient.easypatient.dto.MedicamentsGetDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -12,8 +14,28 @@ import java.util.UUID;
 
 @Repository("MedicamentsPostgres")
 public class MedicamentsDataBaseAccessService implements MedicamentsDao{
+
+    final String sqlInsertMedicaments = "INSERT INTO medicaments VALUES(?, ?, ?, ?, ?)";
+
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public MedicamentsDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+
     @Override
     public void insertMedicaments(MedicamentsDTO medicaments) {
+        LocalDateTime date = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlInsertMedicaments,
+                medicaments.getName(),
+                medicaments.getType(),
+                medicaments.getValue(),
+                date,
+                date);
     }
 
     @Override

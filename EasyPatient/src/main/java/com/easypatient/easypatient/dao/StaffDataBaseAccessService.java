@@ -2,6 +2,8 @@ package com.easypatient.easypatient.dao;
 
 import com.easypatient.easypatient.dto.StaffDTO;
 import com.easypatient.easypatient.dto.StaffGetDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -12,8 +14,30 @@ import java.util.UUID;
 
 @Repository("StaffPostgres")
 public class StaffDataBaseAccessService implements StaffDao {
+
+    final String sqlInsertStaff = "INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public StaffDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+
     @Override
     public void insertStaff(StaffDTO staff) {
+        LocalDateTime date = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlInsertStaff,
+                staff.getName(),
+                staff.getEmail(),
+                staff.getPhone(),
+                staff.getPhoneAreaCode(),
+                staff.getPassword(),
+                staff.getRole(),
+                date,
+                date);
     }
 
     @Override
