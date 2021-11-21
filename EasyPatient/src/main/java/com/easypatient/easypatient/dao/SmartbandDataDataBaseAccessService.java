@@ -16,7 +16,7 @@ import java.util.UUID;
 @Repository("SmartbandDataPostgres")
 public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
 
-    final String sqlInsertSmartbandData = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+    final String sqlInsertSmartbandData = "INSERT INTO smartband_data VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
 

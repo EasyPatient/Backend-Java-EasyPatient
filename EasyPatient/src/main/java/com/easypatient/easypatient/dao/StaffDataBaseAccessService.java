@@ -15,7 +15,7 @@ import java.util.UUID;
 @Repository("StaffPostgres")
 public class StaffDataBaseAccessService implements StaffDao {
 
-    final String sqlInsertPatient = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+    final String sqlInsertStaff = "INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -29,7 +29,7 @@ public class StaffDataBaseAccessService implements StaffDao {
     public void insertStaff(StaffDTO staff) {
         LocalDateTime date = LocalDateTime.now();
 
-        jdbcTemplate.update(sqlInsertPatient,
+        jdbcTemplate.update(sqlInsertStaff,
                 staff.getName(),
                 staff.getEmail(),
                 staff.getPhone(),
