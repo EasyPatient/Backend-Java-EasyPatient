@@ -1,5 +1,4 @@
-CREATE TABLE "staff" IF NOT EXISTS (
-"id" uuid PRIMARYKEY DEFAULT (uuid_generate_v4()),
+CREATE TABLE "staff"(
 "name" varchar NOT NULL,
 "email" varchar UNIQUE NOT NULL,
 "phone" varchar UNIQUE NOT NULL,
@@ -7,5 +6,6 @@ CREATE TABLE "staff" IF NOT EXISTS (
 "password" varchar NOT NULL,
 "role" varchar NOT NULL,
 "created_at" timestamp NOT NULL,
-"updated_at" timestamp
+"updated_at" timestamp,
+"id" uuid PRIMARY KEY DEFAULT (uuid_generate_v4())
 );
