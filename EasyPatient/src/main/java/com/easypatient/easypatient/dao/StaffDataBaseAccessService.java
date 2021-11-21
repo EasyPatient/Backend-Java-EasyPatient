@@ -100,6 +100,119 @@ public class StaffDataBaseAccessService implements StaffDao {
                                                     Optional<String> role,
                                                     Optional<LocalDateTime> createdAt,
                                                     Optional<LocalDateTime> updatedAt) throws SQLException {
-        return List.of();
+        int i = 0;
+        int k = 0;
+        final String sqlSelectStaffByVariable = "SELECT name, email, phone, phoneAreaCode, password, role, createdAt, updatedAt FROM staff WHERE ";
+        final String sqlEmail = " (email = ?)";
+        final String sqlName = " (name = ?)";
+        final String sqlCreatedAt = " (created_at = ?)";
+        final String sqlUpdatedAt = " (updated_at = ?)";
+        final String sqlPhone = " (phone = ?)";
+        final String sqlPhoneAreaCode = " (phoneAreaCode = ?)";
+        final String sqlPassword = " (password = ?)";
+        final String sqlRole = " (role = ?)";
+        final String sqlAnd = " AND ";
+        final String sqlSemicolon = ";";
+
+        List<String> expressions = new java.util.ArrayList<>(List.of(sqlSelectStaffByVariable));
+
+        if(name.isPresent()) {
+            i++;
+            expressions.add(sqlName);
+        }
+        if(email.isPresent()) {
+            i++;
+            expressions.add(sqlEmail);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(phone.isPresent()) {
+            i++;
+            expressions.add(sqlPhone);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(phoneAreaCode.isPresent()) {
+            i++;
+            expressions.add(sqlPhoneAreaCode);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(password.isPresent()) {
+            i++;
+            expressions.add(sqlPassword);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(role.isPresent()) {
+            i++;
+            expressions.add(sqlRole);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(createdAt.isPresent()) {
+            i++;
+            expressions.add(sqlCreatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+        if(updatedAt.isPresent()) {
+            i++;
+            expressions.add(sqlUpdatedAt);
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
+        }
+
+        expressions.add(sqlSemicolon);
+        String sqlExpression = String.join(" ", expressions);
+
+        if(i != 0) {
+            Object[] jdbcTable = new Object[i];
+            if(name.isPresent()) {
+                jdbcTable[k] = name.get();
+                k++;
+            }
+            if(email.isPresent()) {
+                jdbcTable[k] = email.get();
+                k++;
+            }
+            if(phone.isPresent()) {
+                jdbcTable[k] = phone.get();
+                k++;
+            }
+            if(phoneAreaCode.isPresent()) {
+                jdbcTable[k] = phoneAreaCode.get();
+                k++;
+            }
+            if(password.isPresent()) {
+                jdbcTable[k] = password.get();
+                k++;
+            }
+            if(role.isPresent()) {
+                jdbcTable[k] = role.get();
+                k++;
+            }
+            if(createdAt.isPresent()) {
+                jdbcTable[k] = createdAt.get();
+                k++;
+            }
+            if(updatedAt.isPresent()) {
+                jdbcTable[k] = updatedAt.get();
+                k++;
+            }
+            return jdbcTemplate.query(
+                    sqlExpression,
+                    jdbcTable,
+                    StaffDataBaseAccessService::mapRow);
+        } else {
+            throw new SQLException("can not query without any parameters!");
+        }
     }
 }
