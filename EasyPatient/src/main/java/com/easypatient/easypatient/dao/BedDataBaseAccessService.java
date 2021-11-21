@@ -18,6 +18,8 @@ import java.util.UUID;
 public class BedDataBaseAccessService implements BedDao {
 
     final String sqlSelectAllBeds = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed";
+    final String sqlSelectBedByID = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed WHERE id = ?";
+
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -67,8 +69,13 @@ public class BedDataBaseAccessService implements BedDao {
 
     @Override
     public Optional<BedGetDTO> selectBedById(UUID id) {
+        BedGetDTO bed = jdbcTemplate.queryForObject(
+                sqlSelectBedByID,
+                new Object[]{id},
+                BedDataBaseAccessService::mapRow);
         return Optional.ofNullable(BedGetDTO.builder().build());
     }
+
 
     @Override
     public List<BedGetDTO> selectBedByVariables(Optional<Integer> number,

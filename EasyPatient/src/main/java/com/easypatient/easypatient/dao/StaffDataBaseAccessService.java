@@ -18,6 +18,7 @@ import java.util.UUID;
 public class StaffDataBaseAccessService implements StaffDao {
 
     final String sqlSelectAllStaff = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff";
+    final String sqlSelectStaffByID = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff WHERE id = ?";
     final String sqlInsertStaff = "INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
@@ -88,6 +89,10 @@ public class StaffDataBaseAccessService implements StaffDao {
 
     @Override
     public Optional<StaffGetDTO> selectStaffById(UUID id) {
+        StaffGetDTO staff = jdbcTemplate.queryForObject(
+                sqlSelectStaffByID,
+                new Object[]{id},
+                StaffDataBaseAccessService::mapRow);
         return Optional.ofNullable(StaffGetDTO.builder().build());
     }
 
