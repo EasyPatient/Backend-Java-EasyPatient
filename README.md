@@ -29,7 +29,10 @@ and copy the value of CONTAINER ID from this command output
 
 4) Create database easypatientdb:
 
-`$ CREATE DATABASE eeasypatientdb`
+`$ CREATE DATABASE easypatientdb;`
+
+5) Create extension:
+`$ CREATE EXTENSION "uuid-ossp";`
 
 ### Useful commands 
 

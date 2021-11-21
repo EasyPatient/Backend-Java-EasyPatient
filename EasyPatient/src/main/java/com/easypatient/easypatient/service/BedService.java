@@ -1,13 +1,14 @@
 package com.easypatient.easypatient.service;
 
 import com.easypatient.easypatient.dao.BedDao;
-import com.easypatient.easypatient.dao.PersonDao;
-import com.easypatient.easypatient.model.Bed;
-import com.easypatient.easypatient.model.Person;
+import com.easypatient.easypatient.dto.BedDTO;
+import com.easypatient.easypatient.dto.BedGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,23 +22,34 @@ public class BedService {
         this.bedDao = bedDao;
     }
 
-    public int addBed(Bed bed) {
-        return bedDao.insertBed(bed.getId(), bed);
+    public void addBed(BedDTO bed) {
+        bedDao.insertBed(bed);
     }
 
-    public List<Bed> getAllBeds() {
+    public List<BedGetDTO> getAllBeds() {
         return bedDao.selectAllBeds();
     }
 
-    public Optional<Bed> getBedById(UUID id) {
+    public Optional<BedGetDTO> getBedById(UUID id) {
         return bedDao.selectBedById(id);
     }
 
-    public int deleteBed(UUID id) {
-        return bedDao.deleteBedById(id);
+    public List<BedGetDTO> getBedByVariables(Optional<Integer> number,
+                                                 Optional<UUID> patientId,
+                                                 Optional<UUID> roomId,
+                                                 Optional<LocalDateTime> updatedAt,
+                                                 Optional<LocalDateTime> createdAt) throws SQLException {
+        return bedDao.selectBedByVariables(number, patientId, roomId, updatedAt, createdAt);
     }
 
-    public int updateBed(UUID id, Bed bed) {
-        return bedDao.updateBedById(id, bed);
+    public void deleteBed(UUID id) {
+        bedDao.deleteBedById(id);
+    }
+
+    public void updateBed(UUID id,
+                          Optional<Integer> number,
+                          Optional<UUID> patientId,
+                          Optional<UUID> roomId) throws SQLException {
+        bedDao.updateBedById(id, number, patientId, roomId);
     }
 }

@@ -4,3 +4,7 @@ app:
     username: postgres
     password: password
     pool-size: 30
+#    jdbc-url: jdbc:postgresql://139.162.138.193:5432/easypatient
+#    username: easypatient
+#    password: easypatient123
+#    pool-size: 30

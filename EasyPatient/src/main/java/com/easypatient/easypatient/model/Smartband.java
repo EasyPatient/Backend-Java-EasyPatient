@@ -1,8 +1,10 @@
 package com.easypatient.easypatient.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -10,14 +12,10 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode
 @Builder
-public class Person {
+public class Smartband {
     private final UUID id;
-    @NotBlank
-    private final String name;
-    private int age;
-    private UUID bedId;
-    private final LocalDateTime arrivedAt;
+    private String mac;
+    private String name;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }

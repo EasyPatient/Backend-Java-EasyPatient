@@ -1,6 +1,9 @@
 package com.easypatient.easypatient.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -9,12 +12,10 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode
 @Builder
-public class Bed {
+public class Room {
     private final UUID id;
     private int number;
-    private UUID patientId;
-    private UUID roomId;
-    private LocalDateTime updatedAt;
+    private String name;
     private final LocalDateTime createdAt;
-
+    private LocalDateTime updatedAt;
 }

@@ -1,5 +1,8 @@
 package com.easypatient.easypatient.api;
 
+import com.easypatient.easypatient.dto.BedDTO;
+import com.easypatient.easypatient.dto.BedGetDTO;
+import com.easypatient.easypatient.dto.PatientGetDTO;
 import com.easypatient.easypatient.model.Bed;
 import com.easypatient.easypatient.service.BedService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +10,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequestMapping("api/v1/bed")
@@ -21,17 +27,17 @@ public class BedController {
     }
 
     @PostMapping
-    public void addBed(@Valid @NonNull @RequestBody Bed Bed) {
+    public void addBed(@Valid @NonNull @RequestBody BedDTO Bed) {
         bedService.addBed(Bed);
     }
 
     @GetMapping
-    public List<Bed> getAllPeople() {
+    public List<BedGetDTO> getAllBeds() {
         return bedService.getAllBeds();
     }
 
     @GetMapping("{id}")
-    public Bed getBedById(@PathVariable("id") UUID id) {
+    public BedGetDTO getBedById(@PathVariable("id") UUID id) {
         return bedService.getBedById(id)
                 .orElse(null);
     }
@@ -42,7 +48,24 @@ public class BedController {
     }
 
     @PutMapping(path = "{id}")
-    public void updateBed(@PathVariable("id") UUID id, @Valid @NonNull @RequestBody Bed BedToUpdate) {
-        bedService.updateBed(id, BedToUpdate);
+    public void updateBedById(@PathVariable("id") UUID id,
+                          @RequestParam(required = false) Optional<Integer> number,
+                          @RequestParam(required = false) Optional<UUID> patientId,
+                          @RequestParam(required = false) Optional<UUID> roomId) throws SQLException {
+        bedService.updateBed(id, number, patientId, roomId);
     }
+
+    @GetMapping(path = "/getByVariables")
+    public List<BedGetDTO> getBedByVariables(@RequestParam(required = false) Optional<Integer> number,
+                                                      @RequestParam(required = false) Optional<UUID> patientId,
+                                                      @RequestParam(required = false) Optional<UUID> roomId,
+                                                      @RequestParam(required = false) Optional<LocalDateTime> updatedAt,
+                                                      @RequestParam(required = false) Optional<LocalDateTime> createdAt) throws SQLException {
+        return bedService.getBedByVariables(number,
+                patientId,
+                roomId,
+                createdAt,
+                updatedAt);
+    }
+
 }
