@@ -1,11 +1,13 @@
 package com.easypatient.easypatient.dao;
 
+import com.easypatient.easypatient.dto.PatientGetDTO;
 import com.easypatient.easypatient.dto.StaffDTO;
 import com.easypatient.easypatient.dto.StaffGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Repository("StaffPostgres")
 public class StaffDataBaseAccessService implements StaffDao {
 
+    final String sqlSelectAllStaff = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff";
     final String sqlInsertStaff = "INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
@@ -24,6 +27,28 @@ public class StaffDataBaseAccessService implements StaffDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    private static StaffGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
+        UUID id = UUID.fromString(resultSet.getString("id"));
+        String name = resultSet.getString("name");
+        String email = resultSet.getString("email");
+        String phone = resultSet.getString("phone");
+        String phone_area_code = resultSet.getString("phone_area_code");
+        String password = resultSet.getString("password");
+        String role = resultSet.getString("role");
+        LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
+        LocalDateTime updatedAt = resultSet.getTimestamp("updated_at").toLocalDateTime();
+        return StaffGetDTO.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .phone(phone)
+                .phoneAreaCode(phone_area_code)
+                .password(password)
+                .role(role)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
 
     @Override
     public void insertStaff(StaffDTO staff) {
@@ -42,7 +67,9 @@ public class StaffDataBaseAccessService implements StaffDao {
 
     @Override
     public List<StaffGetDTO> selectAllStaff() {
-        return List.of();
+        return jdbcTemplate.query(sqlSelectAllStaff,
+                StaffDataBaseAccessService::mapRow);
+
     }
 
     @Override

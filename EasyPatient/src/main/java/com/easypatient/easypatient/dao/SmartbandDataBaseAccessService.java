@@ -1,9 +1,15 @@
 package com.easypatient.easypatient.dao;
 
+import com.easypatient.easypatient.dto.PatientGetDTO;
 import com.easypatient.easypatient.dto.SmartbandDTO;
+import com.easypatient.easypatient.dto.SmartbandDataGetDTO;
 import com.easypatient.easypatient.dto.SmartbandGetDTO;
+import com.easypatient.easypatient.model.SmartbandData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,13 +18,39 @@ import java.util.UUID;
 
 @Repository("SmartbandPostgres")
 public class SmartbandDataBaseAccessService implements SmartbandDao {
+
+    final String sqlSelectAllSmartbandData = "SELECT id, mac, name, created_at, updated_at FROM smartband_data";
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public SmartbandDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    private static SmartbandGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
+        UUID id = UUID.fromString(resultSet.getString("id"));
+        String mac = resultSet.getString("mac");
+        String name = resultSet.getString("name");
+        LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
+        LocalDateTime updatedAt = resultSet.getTimestamp("updated_at").toLocalDateTime();
+        return SmartbandGetDTO.builder()
+                .id(id)
+                .mac(mac)
+                .name(name)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
+    }
+
     @Override
     public void insertSmartband(SmartbandDTO smartband) {
     }
 
     @Override
     public List<SmartbandGetDTO> selectAllSmartbands() {
-        return List.of();
+        return jdbcTemplate.query(sqlSelectAllSmartbandData,
+                SmartbandDataBaseAccessService::mapRow);
     }
 
     @Override
