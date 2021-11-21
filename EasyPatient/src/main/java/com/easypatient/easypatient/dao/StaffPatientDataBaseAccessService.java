@@ -19,7 +19,7 @@ public class StaffPatientDataBaseAccessService implements StaffPatientDao{
     final String sqlSelectStaffPatientByPatientId = "SELECT patient_id, staff_id, created_at, updated_at FROM staff_patient WHERE patient_id = ?";
     final String sqlSelectStaffPatientByStaffId = "SELECT patient_id, staff_id, created_at, updated_at FROM staff_patient WHERE staff_id = ?";
     final String sqlInsertStaffPatient = "INSERT INTO staff_patient  VALUES(?, ?, ?, ?)";
-    final String sqlDeleteStaffPatient = "DELETE FROM staff_patient WHERE patient_id = ? AND staff_id = ?";
+    final String sqlDeleteStaffPatient = "DELETE FROM staff_patient WHERE patient_id = ? AND (staff_id = ?)";
 
 
     private final JdbcTemplate jdbcTemplate;

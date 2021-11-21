@@ -32,7 +32,7 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
     final String sqlUpdatedAt = " (updated_at = ?)";
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
-    final String sqlDeleteSmartbandData = "DELETE FROM smartband_data WHERE smartband_id = ? AND patient_id = ?";
+    final String sqlDeleteSmartbandData = "DELETE FROM smartband_data WHERE smartband_id = ? AND (patient_id = ?)";
 
     private final JdbcTemplate jdbcTemplate;
     private final PatientDataBaseAccessService patientDataBaseAccessService;

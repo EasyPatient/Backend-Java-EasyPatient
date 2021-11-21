@@ -19,7 +19,7 @@ public class PatientMedicamentsDataBaseAccessService implements PatientMedicamen
     final String sqlSelectPatientMedicamentsByPatientId = "SELECT patient_id, medicaments_id, created_at, updated_at FROM patient_medicaments WHERE patient_id = ?";
     final String sqlSelectPatientMedicamentsByMedicamentsId = "SELECT patient_id, medicaments_id, created_at, updated_at FROM patient_medicaments WHERE medicaments_id = ?";
     final String sqlInsertPatientMedicaments = "INSERT INTO patient_medicaments VALUES(?, ?, ?, ?)";
-    final String sqlDeletePatientMedicaments = "DELETE FROM patient_medicaments WHERE patient_id = ? AND medicaments_id = ?";
+    final String sqlDeletePatientMedicaments = "DELETE FROM patient_medicaments WHERE patient_id = ? AND (medicaments_id = ?)";
 
 
     private final JdbcTemplate jdbcTemplate;
