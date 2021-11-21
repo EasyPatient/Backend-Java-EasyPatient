@@ -32,6 +32,7 @@ public class StaffDataBaseAccessService implements StaffDao {
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
     final String sqlDeleteStaff = "DELETE FROM staff WHERE id = ?";
+    final String sqlUpdateStaffById = "UPDATE staff SET name = ?, email = ?, phone = ?, phone_area_code = ?, password = ?, role = ?, updated_at = ? WHERE id = ?";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -100,6 +101,39 @@ public class StaffDataBaseAccessService implements StaffDao {
                                 Optional<String> phoneAreaCode,
                                 Optional<String> password,
                                 Optional<String> role) throws SQLException {
+        Optional<StaffGetDTO> existingStaffOptional = selectStaffById(id);
+        StaffGetDTO existingStaff;
+        String nameToUpdate;
+        String emailToUpdate;
+        String phoneToUpdate;
+        String phoneAreaCodeToUpdate;
+        String passwordToUpdate;
+        String roleToUpdate;
+        LocalDateTime updatedAtToUpdate;
+
+        if(existingStaffOptional.isPresent()) {
+            existingStaff = existingStaffOptional.get();
+        } else {
+            throw new SQLException("Staff with ID: " + " doesn't exist.");
+        }
+
+        nameToUpdate = name.orElseGet(existingStaff::getName);
+        emailToUpdate = email.orElseGet(existingStaff::getEmail);
+        phoneToUpdate = phone.orElseGet(existingStaff::getPhone);
+        phoneAreaCodeToUpdate = phoneAreaCode.orElseGet(existingStaff::getPhoneAreaCode);
+        passwordToUpdate = password.orElseGet(existingStaff::getPassword);
+        roleToUpdate = role.orElseGet(existingStaff::getRole);
+        updatedAtToUpdate = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlUpdateStaffById,
+                nameToUpdate,
+                emailToUpdate,
+                phoneToUpdate,
+                phoneAreaCodeToUpdate,
+                passwordToUpdate,
+                roleToUpdate,
+                updatedAtToUpdate,
+                id);
     }
 
     @Override

@@ -29,6 +29,7 @@ public class RoomDataBaseAccessService implements RoomDao {
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
     final String sqlDeleteRoom = "DELETE FROM room WHERE id = ?";
+    final String sqlUpdateRoomById = "UPDATE room SET number = ?, name = ?, updated_at = ? WHERE id = ?";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -81,6 +82,27 @@ public class RoomDataBaseAccessService implements RoomDao {
     public void updateRoomById(UUID id,
                                Optional<Integer> number,
                                Optional<String> name) throws SQLException {
+        Optional<RoomGetDTO> existingRoomOptional = selectRoomById(id);
+        RoomGetDTO existingRoom;
+        int numberToUpdate;
+        String nameToUpdate;
+        LocalDateTime updatedAtToUpdate;
+
+        if(existingRoomOptional.isPresent()) {
+            existingRoom = existingRoomOptional.get();
+        } else {
+            throw new SQLException("Room with ID: " + id + "doesn't exist.");
+        }
+
+        numberToUpdate = number.orElseGet(existingRoom::getNumber);
+        nameToUpdate = name.orElseGet(existingRoom::getName);
+        updatedAtToUpdate = LocalDateTime.now();
+
+        jdbcTemplate.update(sqlUpdateRoomById,
+                numberToUpdate,
+                nameToUpdate,
+                updatedAtToUpdate,
+                id);
     }
 
     @Override

@@ -86,20 +86,18 @@ public class StaffPatientDataBaseAccessService implements StaffPatientDao{
 
     @Override
     public List<StaffPatientGetDTO> selectStaffPatientByPatientId(UUID patientId) throws SQLException {
-        StaffPatientGetDTO staffPatient = jdbcTemplate.queryForObject(
+        return jdbcTemplate.query(
                 sqlSelectStaffPatientByPatientId,
                 new Object[]{patientId},
                 StaffPatientDataBaseAccessService::mapRow);
-        return List.of();
     }
 
     @Override
     public List<StaffPatientGetDTO> selectStaffPatientByStaffId(UUID stafftId) throws SQLException {
-        StaffPatientGetDTO staffPatient = jdbcTemplate.queryForObject(
+        return jdbcTemplate.query(
                 sqlSelectStaffPatientByStaffId,
                 new Object[]{stafftId},
                 StaffPatientDataBaseAccessService::mapRow);
-        return List.of();
     }
 
 }
