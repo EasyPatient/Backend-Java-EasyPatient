@@ -1,15 +1,10 @@
 # Backend-Java-EasyPatient
 Java Backend for easypatient project
 
-## OpenAPI 
-To use openAPI type in your browser:
-
-`http://localhost:8080/swagger-ui.html`
-
-note: if you change the port of application the url will change
-
 ## Local postgres setup
-These steps allow you to run a docker container with postgres database on your local machine.
+These steps allow you to run a docker container with postgres database on your local machine. 
+You have to reproduce these steps before running the application.
+
 ### Steps to reproduce for local postgres database setup
 1) Create docker container with postgres:
 
@@ -20,7 +15,7 @@ These steps allow you to run a docker container with postgres database on your l
 
 `$ docker ps`
 
-and copy the value of CONTAINER ID from this command output 
+and copy the value of CONTAINER ID from this command output
 
 3) Enter the container
 
@@ -35,11 +30,32 @@ After creating a new database you can connect to it with:
 
 `$ \c easypatientdb`
 
-5) Create extension:
-`$ CREATE EXTENSION "uuid-ossp";`
+5) Create extension (execute this command while being connected to easypatientdb):
+   `$ CREATE EXTENSION "uuid-ossp";`
 
-note: this command has to be executed while being connected to the previously created database.
+note: this command has to be executed while being connected to the previously created database. 
+Now you can run the application. You can also try some of useful commands listed at the bottom 
+of this page.
 
+##Sign up and sign in
+To start using the application you have to create a user. To do it simply open postman and send 
+a request to `localhost:8080/api/v1/registration` with request body as raw JSON: 
+```
+{
+"firstName": "jan",
+"lastName": "kowalski",
+"email": "jan.kowalski@email.com",
+"password": "password",
+"role": "USER"
+}
+```
+
+## OpenAPI 
+To use openAPI type in your browser:
+
+`http://localhost:8080/swagger-ui.html`
+
+note: if you change the port of application the url will change
 
 ### Useful commands 
 
