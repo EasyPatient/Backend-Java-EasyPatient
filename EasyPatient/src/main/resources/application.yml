@@ -8,3 +8,11 @@ app:
 #    username: easypatient
 #    password: easypatient123
 #    pool-size: 30
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true

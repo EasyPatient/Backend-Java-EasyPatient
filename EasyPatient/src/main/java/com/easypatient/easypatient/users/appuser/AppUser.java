@@ -1,4 +1,4 @@
-package com.easypatient.easypatient.appuser;
+package com.easypatient.easypatient.users.appuser;
 
 
 import lombok.EqualsAndHashCode;
@@ -9,9 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,10 +22,21 @@ import java.util.UUID;
 @Entity
 public class AppUser implements UserDetails {
 
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private UUID id;
     private String username;
     private String password;
-    private String name;
+    private String firstName;
+    private String lastName;
     private LocalDateTime bornDate;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
@@ -42,27 +51,25 @@ public class AppUser implements UserDetails {
 
     public AppUser(String username,
                    String password,
-                   String name,
+                   String firstName,
+                   String lastName,
                    LocalDateTime bornDate,
                    AppUserRole appUserRole,
                    String email,
                    String phoneNumber,
                    String phoneAreaCode,
-                   UUID staffId,
-                   boolean locked,
-                   boolean enabled) {
+                   UUID staffId) {
         LocalDateTime date = LocalDateTime.now();
         this.username = username;
         this.password = password;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.bornDate = bornDate;
         this.appUserRole = appUserRole;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.phoneAreaCode = phoneAreaCode;
         this.staffId = staffId;
-        this.locked = locked;
-        this.enabled = enabled;
         this.updatedAt = date;
         this.createdAt = date;
     }
@@ -101,5 +108,13 @@ public class AppUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getId() {
+        return id;
     }
 }
