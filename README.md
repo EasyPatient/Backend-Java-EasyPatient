@@ -31,8 +31,15 @@ and copy the value of CONTAINER ID from this command output
 
 `$ CREATE DATABASE easypatientdb;`
 
+After creating a new database you can connect to it with:
+
+`$ \c easypatientdb`
+
 5) Create extension:
 `$ CREATE EXTENSION "uuid-ossp";`
+
+note: this command has to be executed while being connected to the previously created database.
+
 
 ### Useful commands 
 
