@@ -37,7 +37,7 @@ note: this command has to be executed while being connected to the previously cr
 Now you can run the application. You can also try some of useful commands listed at the bottom 
 of this page.
 
-##Sign up and sign in
+## Sign up and sign in
 To start using the application you have to create a user. To do it simply open postman and send 
 a request to `localhost:8080/api/v1/registration` with request body as raw JSON: 
 ```
