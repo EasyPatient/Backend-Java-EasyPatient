@@ -1,6 +1,5 @@
 package com.easypatient.easypatient.users.appuser;
 
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +9,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -22,61 +19,43 @@ import java.util.UUID;
 @Entity
 public class AppUser implements UserDetails {
 
+
     @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+            name = "student_sequence",
+            sequenceName = "student_sequence",
             allocationSize = 1
     )
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            generator = "student_sequence"
     )
-    private UUID id;
-    private String username;
-    private String password;
+    private Long id;
     private String firstName;
     private String lastName;
-    private LocalDateTime bornDate;
+    private String email;
+    private String password;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
-    private String email;
-    private String phoneNumber;
-    private String phoneAreaCode;
-    private UUID staffId;
-    private boolean locked;
-    private boolean enabled;
-    private LocalDateTime updatedAt;
-    private LocalDateTime createdAt;
+    private Boolean locked = false;
+    private Boolean enabled = false;
 
-    public AppUser(String username,
-                   String password,
-                   String firstName,
+    public AppUser(String firstName,
                    String lastName,
-                   LocalDateTime bornDate,
-                   AppUserRole appUserRole,
                    String email,
-                   String phoneNumber,
-                   String phoneAreaCode,
-                   UUID staffId) {
-        LocalDateTime date = LocalDateTime.now();
-        this.username = username;
-        this.password = password;
+                   String password,
+                   AppUserRole appUserRole) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.bornDate = bornDate;
-        this.appUserRole = appUserRole;
         this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.phoneAreaCode = phoneAreaCode;
-        this.staffId = staffId;
-        this.updatedAt = date;
-        this.createdAt = date;
+        this.password = password;
+        this.appUserRole = appUserRole;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
+        SimpleGrantedAuthority authority =
+                new SimpleGrantedAuthority(appUserRole.name());
         return Collections.singletonList(authority);
     }
 
@@ -87,7 +66,15 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     @Override
@@ -107,14 +94,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getId() {
-        return id;
+        return enabled;
     }
 }

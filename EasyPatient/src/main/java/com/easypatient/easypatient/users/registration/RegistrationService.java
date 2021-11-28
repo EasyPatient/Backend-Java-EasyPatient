@@ -1,7 +1,7 @@
 package com.easypatient.easypatient.users.registration;
 
-
 import com.easypatient.easypatient.users.appuser.AppUser;
+import com.easypatient.easypatient.users.appuser.AppUserRole;
 import com.easypatient.easypatient.users.appuser.AppUserService;
 import com.easypatient.easypatient.users.email.EmailSender;
 import com.easypatient.easypatient.users.registration.token.ConfirmationToken;
@@ -21,30 +21,32 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    public String register(RegistrationRequest request) throws IllegalAccessException {
-        boolean isValidEmail = emailValidator.test(request.getEmail());
-        if(!isValidEmail) {
-            throw new IllegalAccessException("Email is not valid.");
+    public String register(RegistrationRequest request) {
+        boolean isValidEmail = emailValidator.
+                test(request.getEmail());
+
+        if (!isValidEmail) {
+            throw new IllegalStateException("email not valid");
         }
-        String token = appUserService.signUpUser(new AppUser(request.getUsername(),
-                request.getPassword(),
-                request.getFirstName(),
-                request.getLastName(),
-                request.getBornDate(),
-                request.getAppUserRole(),
-                request.getEmail(),
-                request.getPhoneNumber(),
-                request.getPhoneAreaCode(),
-                request.getStaffId()));
 
+        String token = appUserService.signUpUser(
+                new AppUser(
+                        request.getFirstName(),
+                        request.getLastName(),
+                        request.getEmail(),
+                        request.getPassword(),
+                        AppUserRole.USER
 
-    String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+                )
+        );
+
+        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
         emailSender.send(
                 request.getEmail(),
-    buildEmail(request.getFirstName(), link));
+                buildEmail(request.getFirstName(), link));
 
         return token;
-}
+    }
 
     @Transactional
     public String confirmToken(String token) {
