@@ -1,9 +1,6 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.dto.BedDTO;
-import com.easypatient.easypatient.dto.BedGetDTO;
-import com.easypatient.easypatient.dto.PatientGetDTO;
-import com.easypatient.easypatient.dto.RoomGetDTO;
+import com.easypatient.easypatient.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -70,8 +67,14 @@ public class BedDataBaseAccessService implements BedDao {
         UUID patientId = bed.getPatientId();
         UUID roomId = bed.getRoomId();
 
-        Optional<PatientGetDTO> patientFromDB = patientDataBaseAccessService.selectPatientById(patientId);
-        Optional<RoomGetDTO> roomFromDB = roomDataBaseAccessService.selectRoomById(roomId);
+        Optional<PatientGetDTO> patientFromDB;
+        Optional<RoomGetDTO> roomFromDB;
+        try {
+            patientFromDB = patientDataBaseAccessService.selectPatientById(patientId);
+            roomFromDB = roomDataBaseAccessService.selectRoomById(roomId);
+        } catch (Exception e) {
+            throw new SQLException("can not insert bed with patient ID: " + patientId + ", and room ID: " + roomId);
+        }
 
         if(patientFromDB.isPresent() && roomFromDB.isPresent()) {
             jdbcTemplate.update(sqlInsertBed,

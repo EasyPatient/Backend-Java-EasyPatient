@@ -21,12 +21,12 @@ public class RoomDataBaseAccessService implements RoomDao {
     final String sqlSelectAllRooms = "SELECT id, number, name, created_at, updated_at FROM room";
     final String sqlSelectRoomByID = "SELECT id, number, name, created_at, updated_at FROM room WHERE id = ?";
     final String sqlInsertRoom = "INSERT INTO room VALUES(?, ?, ?, ?)";
-    final String sqlSelectRoomByVariable = "SELECT number, name, created_at, updated_at FROM room WHERE ";
-    final String sqlNumber = " (number = ?)";
-    final String sqlName = " (name = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectRoomByVariable = "SELECT id, number, name, created_at, updated_at FROM room WHERE";
+    final String sqlNumber = "(number = ?)";
+    final String sqlName = "(name = ?)";
+    final String sqlCreatedAt = "(created_at = ?)";
+    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlDeleteRoom = "DELETE FROM room WHERE id = ?";
     final String sqlUpdateRoomById = "UPDATE room SET number = ?, name = ?, updated_at = ? WHERE id = ?";
@@ -150,8 +150,8 @@ public class RoomDataBaseAccessService implements RoomDao {
             }
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(";");
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];
