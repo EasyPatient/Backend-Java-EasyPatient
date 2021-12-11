@@ -22,7 +22,7 @@ public class PatientService {
         this.patientDao = patientDao;
     }
 
-    public void addPatient(PatientDTO patient) {
+    public void addPatient(PatientDTO patient) throws SQLException {
         patientDao.insertPatient(patient);
     }
 

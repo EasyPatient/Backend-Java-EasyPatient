@@ -19,13 +19,11 @@ public interface BedDao {
 
     void updateBedById(UUID id,
                        Optional<Integer> number,
-                       Optional<UUID> patientId,
                        Optional<UUID> roomId) throws SQLException;
 
     Optional<BedGetDTO> selectBedById(UUID id);
 
     List<BedGetDTO> selectBedByVariables(Optional<Integer> number,
-                                         Optional<UUID> patientId,
                                          Optional<UUID> roomId,
                                          Optional<LocalDateTime> updatedAt,
                                          Optional<LocalDateTime> createdAt) throws SQLException;

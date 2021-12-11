@@ -50,7 +50,7 @@ public class BedController {
                           @RequestParam(required = false) Optional<Integer> number,
                           @RequestParam(required = false) Optional<UUID> patientId,
                           @RequestParam(required = false) Optional<UUID> roomId) throws SQLException {
-        bedService.updateBed(id, number, patientId, roomId);
+        bedService.updateBed(id, number, roomId);
     }
 
     @GetMapping(path = "/getByVariables")
@@ -60,7 +60,6 @@ public class BedController {
                                                       @RequestParam(required = false) Optional<LocalDateTime> updatedAt,
                                                       @RequestParam(required = false) Optional<LocalDateTime> createdAt) throws SQLException {
         return bedService.getBedByVariables(number,
-                patientId,
                 roomId,
                 createdAt,
                 updatedAt);

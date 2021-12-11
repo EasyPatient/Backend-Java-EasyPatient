@@ -15,44 +15,38 @@ import java.util.UUID;
 @Repository("BedPostgres")
 public class BedDataBaseAccessService implements BedDao {
 
-    final String sqlSelectAllBeds = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed";
-    final String sqlSelectBedByID = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed WHERE id = ?";
-    final String sqlSelectBedByVariable = "SELECT id, number, patient_id, room_id, created_at, updated_at FROM bed WHERE ";
+    final String sqlSelectAllBeds = "SELECT id, number, room_id, created_at, updated_at FROM bed";
+    final String sqlSelectBedByID = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE id = ?";
+    final String sqlSelectBedByVariable = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE ";
     final String sqlNumber = " (number = ?)";
-    final String sqlPatientId = " (patient_id = ?)";
     final String sqlRoomId = " (room_id = ?)";
     final String sqlCreatedAt = " (created_at = ?)";
     final String sqlUpdatedAt = " (updated_at = ?)";
     final String sqlAnd = " AND ";
     final String sqlSemicolon = ";";
-    final String sqlInsertBed = "INSERT INTO bed VALUES(?, ?, ?, ?, ?)";
+    final String sqlInsertBed = "INSERT INTO bed VALUES(?, ?, ?, ?)";
     final String sqlDeleteBed = "DELETE FROM bed WHERE id = ?";
-    final String sqlUpdateBedById = "UPDATE  bed SET number = ?, patientId = ?, roomId = ? WHERE id = ?";
+    final String sqlUpdateBedById = "UPDATE  bed SET number = ?,roomId = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
-    private final PatientDataBaseAccessService patientDataBaseAccessService;
     private final RoomDataBaseAccessService roomDataBaseAccessService;
 
     @Autowired
     public BedDataBaseAccessService(JdbcTemplate jdbcTemplate,
-                                    PatientDataBaseAccessService patientDataBaseAccessService,
                                     RoomDataBaseAccessService roomDataBaseAccessService) {
         this.jdbcTemplate = jdbcTemplate;
-        this.patientDataBaseAccessService = patientDataBaseAccessService;
         this.roomDataBaseAccessService = roomDataBaseAccessService;
     }
 
     private static BedGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
         UUID id = UUID.fromString(resultSet.getString("id"));
         int number = resultSet.getInt("number");
-        UUID patient_id = UUID.fromString(resultSet.getString("patient_id"));
         UUID room_id = UUID.fromString(resultSet.getString("room_id"));
         LocalDateTime createdAt = resultSet.getTimestamp("created_at").toLocalDateTime();
         LocalDateTime updatedAt = resultSet.getTimestamp("updated_at").toLocalDateTime();
         return BedGetDTO.builder()
                 .id(id)
                 .number(number)
-                .patientId(patient_id)
                 .roomId(room_id)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
@@ -64,27 +58,23 @@ public class BedDataBaseAccessService implements BedDao {
 
         LocalDateTime date = LocalDateTime.now();
 
-        UUID patientId = bed.getPatientId();
         UUID roomId = bed.getRoomId();
 
-        Optional<PatientGetDTO> patientFromDB;
         Optional<RoomGetDTO> roomFromDB;
         try {
-            patientFromDB = patientDataBaseAccessService.selectPatientById(patientId);
             roomFromDB = roomDataBaseAccessService.selectRoomById(roomId);
         } catch (Exception e) {
-            throw new SQLException("can not insert bed with patient ID: " + patientId + ", and room ID: " + roomId);
+            throw new SQLException("can not insert bed with room ID: " + roomId);
         }
 
-        if(patientFromDB.isPresent() && roomFromDB.isPresent()) {
+        if(roomFromDB.isPresent()) {
             jdbcTemplate.update(sqlInsertBed,
                     bed.getNumber(),
-                    bed.getPatientId(),
                     bed.getRoomId(),
                     date,
                     date);
         } else {
-            throw new SQLException("can not insert bed with patient ID: " + patientId + ", and room ID: " + roomId);
+            throw new SQLException("can not insert bed with room ID: " + roomId);
         }
     }
 
@@ -104,12 +94,10 @@ public class BedDataBaseAccessService implements BedDao {
     @Override
     public void updateBedById(UUID id,
                               Optional<Integer> number,
-                              Optional<UUID> patientId,
                               Optional<UUID> roomId) throws SQLException {
         Optional<BedGetDTO> existingBedOptional = selectBedById(id);
         BedGetDTO existingBed;
         int numberToUpdate;
-        UUID patientIdToUpdate;
         UUID roomIdToUpdate;
         LocalDateTime updatedAtToUpdate;
 
@@ -119,13 +107,11 @@ public class BedDataBaseAccessService implements BedDao {
             throw new SQLException("Bed with ID: " + id + "does not exist.");
         }
         numberToUpdate = number.orElseGet(existingBed::getNumber);
-        patientIdToUpdate = patientId.orElseGet(existingBed::getPatientId);
         roomIdToUpdate = roomId.orElseGet(existingBed::getRoomId);
         updatedAtToUpdate = LocalDateTime.now();
 
         jdbcTemplate.update(sqlUpdateBedById,
                 numberToUpdate,
-                patientIdToUpdate,
                 roomIdToUpdate,
                 updatedAtToUpdate,
                 id);
@@ -143,7 +129,6 @@ public class BedDataBaseAccessService implements BedDao {
 
     @Override
     public List<BedGetDTO> selectBedByVariables(Optional<Integer> number,
-                                                Optional<UUID> patientId,
                                                 Optional<UUID> roomId,
                                                 Optional<LocalDateTime> updatedAt,
                                                 Optional<LocalDateTime> createdAt) throws SQLException {
@@ -155,13 +140,6 @@ public class BedDataBaseAccessService implements BedDao {
         if(number.isPresent()) {
             i++;
             expressions.add(sqlNumber);
-        }
-        if(patientId.isPresent()) {
-            i++;
-            expressions.add(sqlPatientId);
-            if(i > 1) {
-                expressions.add(sqlAnd);
-            }
         }
         if(roomId.isPresent()) {
             i++;
@@ -192,10 +170,6 @@ public class BedDataBaseAccessService implements BedDao {
             Object[] jdbcTable = new Object[i];
             if(number.isPresent()) {
                 jdbcTable[k] = number.get();
-                k++;
-            }
-            if(patientId.isPresent()) {
-                jdbcTable[k] = patientId.get();
                 k++;
             }
             if(roomId.isPresent()) {
