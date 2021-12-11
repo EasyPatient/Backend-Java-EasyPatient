@@ -26,6 +26,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/v*/registration/**")
                 .permitAll()
+                .antMatchers("/api/v1/smartbandData")
+                .permitAll()
                 .anyRequest()
                 .authenticated().and()
                 .formLogin();
