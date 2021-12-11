@@ -23,6 +23,10 @@ public class RoomService {
     }
 
     public void addRoom(RoomDTO room) {
+        int number = room.getNumber();
+        if(number < 0) {
+            throw new IllegalStateException("Cannot create a room with number that is less than 0.");
+        }
         roomDao.insertRoom(room);
     }
 
@@ -48,6 +52,9 @@ public class RoomService {
     public void updateRoom(UUID id,
                            Optional<Integer> number,
                            Optional<String> name) throws SQLException {
+        if (number.isPresent() && number.get() < 0) {
+            throw new IllegalStateException("Cannot create a room with number that is less than 0.");
+        }
         roomDao.updateRoomById(id, number, name);
     }
 
