@@ -1,7 +1,6 @@
 package com.easypatient.easypatient.users.registration;
 
 import com.easypatient.easypatient.users.appuser.AppUser;
-import com.easypatient.easypatient.users.appuser.AppUserRole;
 import com.easypatient.easypatient.users.appuser.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
