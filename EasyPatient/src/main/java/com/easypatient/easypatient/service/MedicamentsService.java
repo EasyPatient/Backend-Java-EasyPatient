@@ -39,7 +39,7 @@ public class MedicamentsService {
                                                                  Optional<String> value,
                                                              Optional<LocalDateTime> createdAfter,
                                                              Optional<LocalDateTime> updatedAfter) throws SQLException {
-        return medicamentsDao.selectMedicamentsByVariables(name, type, value, createdAt, updatedAfter);
+        return medicamentsDao.selectMedicamentsByVariables(name, type, value, createdAfter, updatedAfter);
     }
 
     public void deleteMedicaments(UUID id) {
