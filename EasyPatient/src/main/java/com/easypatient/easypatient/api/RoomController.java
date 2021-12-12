@@ -4,6 +4,7 @@ import com.easypatient.easypatient.dto.RoomDTO;
 import com.easypatient.easypatient.dto.RoomGetDTO;
 import com.easypatient.easypatient.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,12 +44,16 @@ public class RoomController {
     @GetMapping(path = "/getByVariables")
     public List<RoomGetDTO> getRoomByVariables(@RequestParam(required = false) Optional<Integer> number,
                                                @RequestParam(required = false) Optional<String> name,
-                                               @RequestParam(required = false) Optional<LocalDateTime> createdAt,
-                                               @RequestParam(required = false)Optional<LocalDateTime> updatedAt) throws SQLException {
+                                               @RequestParam(required = false)
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                           Optional<LocalDateTime> createdAfter,
+                                               @RequestParam(required = false)
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                           Optional<LocalDateTime> updatedAfter) throws SQLException {
         return roomService.getRoomByVariables(number,
                 name,
-                createdAt,
-                updatedAt);
+                createdAfter,
+                updatedAfter);
     }
 
     @DeleteMapping(path = "{id}")

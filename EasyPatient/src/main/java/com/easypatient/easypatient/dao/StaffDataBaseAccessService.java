@@ -23,8 +23,8 @@ public class StaffDataBaseAccessService implements StaffDao {
     final String sqlSelectStaffByVariable = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff WHERE";
     final String sqlEmail = "(email = ?)";
     final String sqlName = "(name = ?)";
-    final String sqlCreatedAt = "(created_at = ?)";
-    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
     final String sqlPhone = "(phone = ?)";
     final String sqlPhoneAreaCode = "(phone_area_code = ?)";
     final String sqlPassword = "(password = ?)";
@@ -152,8 +152,8 @@ public class StaffDataBaseAccessService implements StaffDao {
                                                     Optional<String> phoneAreaCode,
                                                     Optional<String> password,
                                                     Optional<String> role,
-                                                    Optional<LocalDateTime> createdAt,
-                                                    Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                    Optional<LocalDateTime> createdAfter,
+                                                    Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -165,56 +165,56 @@ public class StaffDataBaseAccessService implements StaffDao {
         }
         if(email.isPresent()) {
             i++;
-            expressions.add(sqlEmail);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlEmail);
         }
         if(phone.isPresent()) {
             i++;
-            expressions.add(sqlPhone);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlPhone);
         }
         if(phoneAreaCode.isPresent()) {
             i++;
-            expressions.add(sqlPhoneAreaCode);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlPhoneAreaCode);
         }
         if(password.isPresent()) {
             i++;
-            expressions.add(sqlPassword);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlPassword);
         }
         if(role.isPresent()) {
             i++;
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
             expressions.add(sqlRole);
-            if(i > 1) {
-                expressions.add(sqlAnd);
-            }
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAfter);
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAfter);
         }
 
         String sqlExpression = String.join(" ", expressions);
-        sqlExpression = sqlExpression.concat(";");
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];
@@ -242,12 +242,12 @@ public class StaffDataBaseAccessService implements StaffDao {
                 jdbcTable[k] = role.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
             return jdbcTemplate.query(

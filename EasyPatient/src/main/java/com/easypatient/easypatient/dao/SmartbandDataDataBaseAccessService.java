@@ -21,16 +21,16 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
     final String sqlSelectSmartbandDataByPatientId = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE patient_id = ?";
     final String sqlSelectSmartbandDataBySmartbandId = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE smartband_id = ?";
     final String sqlInsertSmartbandData = "INSERT INTO smartband_data VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-    final String sqlSelectSmartbandDataByVariable = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE ";
-    final String sqlSmartbandId = " (smartband_id = ?)";
-    final String sqlPatientId = " (patient_id = ?)";
-    final String sqlHeartRate = " (heart_rate = ?)";
-    final String sqlOxygen = " (oxygen = ?)";
-    final String sqlTemperature = " (temperature = ?)";
-    final String sqlBattery = " (battery = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectSmartbandDataByVariable = "SELECT smartband_id, patient_id, heart_rate, oxygen, temperature, battery, created_at, updated_at FROM smartband_data WHERE";
+    final String sqlSmartbandId = "(smartband_id = ?)";
+    final String sqlPatientId = "(patient_id = ?)";
+    final String sqlHeartRate = "(heart_rate = ?)";
+    final String sqlOxygen = "(oxygen = ?)";
+    final String sqlTemperature = "(temperature = ?)";
+    final String sqlBattery = "(battery = ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlDeleteSmartbandData = "DELETE FROM smartband_data WHERE smartband_id = ? AND (patient_id = ?)";
 
@@ -129,8 +129,8 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
                                                                    Optional<String> oxygen,
                                                                    Optional<String> temperature,
                                                                    Optional<String> battery,
-                                                                   Optional<LocalDateTime> createdAt,
-                                                                   Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                                   Optional<LocalDateTime> createdAfter,
+                                                                   Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -142,56 +142,56 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
         }
         if(patientId.isPresent()) {
             i++;
-            expressions.add(sqlPatientId);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlPatientId);
         }
         if(heartRate.isPresent()) {
             i++;
-            expressions.add(sqlHeartRate);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlHeartRate);
         }
         if(oxygen.isPresent()) {
             i++;
-            expressions.add(sqlOxygen);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlOxygen);
         }
         if(temperature.isPresent()) {
             i++;
-            expressions.add(sqlTemperature);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlTemperature);
         }
         if(battery.isPresent()) {
             i++;
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
             expressions.add(sqlBattery);
-            if(i > 1) {
-                expressions.add(sqlAnd);
-            }
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAfter);
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAfter);
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];
@@ -219,16 +219,16 @@ public class SmartbandDataDataBaseAccessService implements SmartbandDataDao {
                 jdbcTable[k] = battery.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
             return jdbcTemplate.query(

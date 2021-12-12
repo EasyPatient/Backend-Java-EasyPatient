@@ -26,6 +26,6 @@ public interface SmartbandDataDao {
                                                              Optional<String> oxygen,
                                                              Optional<String> temperature,
                                                              Optional<String> battery,
-                                                             Optional<LocalDateTime> createdAt,
-                                                             Optional<LocalDateTime> updatedAt) throws SQLException;
+                                                             Optional<LocalDateTime> createdAfter,
+                                                             Optional<LocalDateTime> updatedAfter) throws SQLException;
 }

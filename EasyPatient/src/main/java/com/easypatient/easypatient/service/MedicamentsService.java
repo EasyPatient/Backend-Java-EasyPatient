@@ -37,9 +37,9 @@ public class MedicamentsService {
     public List<MedicamentsGetDTO> getMedicamentsByVariables(Optional<String> name,
                                                                  Optional<String> type,
                                                                  Optional<String> value,
-                                                                 Optional<LocalDateTime> createdAt,
-                                                                 Optional<LocalDateTime> updatedAt) throws SQLException {
-        return medicamentsDao.selectMedicamentsByVariables(name, type, value, createdAt, updatedAt);
+                                                             Optional<LocalDateTime> createdAfter,
+                                                             Optional<LocalDateTime> updatedAfter) throws SQLException {
+        return medicamentsDao.selectMedicamentsByVariables(name, type, value, createdAt, updatedAfter);
     }
 
     public void deleteMedicaments(UUID id) {

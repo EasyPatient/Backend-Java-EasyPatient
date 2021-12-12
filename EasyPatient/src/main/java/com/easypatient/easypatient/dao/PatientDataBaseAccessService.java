@@ -18,14 +18,14 @@ public class PatientDataBaseAccessService implements PatientDao {
 
     final String sqlSelectAllPeople = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient";
     final String sqlSelectPatientByID = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE id = ?";
-    final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE ";
-    final String sqlName = " (name = ?)";
-    final String sqlAge = " (age = ?)";
-    final String sqlBed = " (bed_id = ?)";
-    final String sqlArrivedAt = " (arrived_at = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE";
+    final String sqlName = "(name = ?)";
+    final String sqlAge = "(age = ?)";
+    final String sqlBed = "(bed_id = ?)";
+    final String sqlArrivedAfter = "(arrived_at >= ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlInsertPatient = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?)";
     final String sqlDeletePatient = "DELETE FROM patient WHERE id = ?";
@@ -142,9 +142,9 @@ public class PatientDataBaseAccessService implements PatientDao {
     public List<PatientGetDTO> selectPatientByVariables(Optional<String> name,
                                                         Optional<Integer> age,
                                                         Optional<UUID> bedId,
-                                                        Optional<LocalDateTime> arrivedAt,
-                                                        Optional<LocalDateTime> createdAt,
-                                                        Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                        Optional<LocalDateTime> arrivedAfter,
+                                                        Optional<LocalDateTime> createdAfter,
+                                                        Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -156,42 +156,42 @@ public class PatientDataBaseAccessService implements PatientDao {
         }
         if(age.isPresent()) {
             i++;
-            expressions.add(sqlAge);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlAge);
         }
         if(bedId.isPresent()) {
             i++;
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
             expressions.add(sqlBed);
-            if(i > 1) {
-                expressions.add(sqlAnd);
-            }
         }
-        if(arrivedAt.isPresent()) {
+        if(arrivedAfter.isPresent()) {
             i++;
-            expressions.add(sqlArrivedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlArrivedAfter);
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAfter);
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAfter);
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];
@@ -207,16 +207,16 @@ public class PatientDataBaseAccessService implements PatientDao {
                 jdbcTable[k] = bedId.get();
                 k++;
             }
-            if(arrivedAt.isPresent()) {
-                jdbcTable[k] = arrivedAt.get();
+            if(arrivedAfter.isPresent()) {
+                jdbcTable[k] = arrivedAfter.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
             return jdbcTemplate.query(

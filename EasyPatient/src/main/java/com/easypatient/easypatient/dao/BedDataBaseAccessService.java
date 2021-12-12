@@ -17,12 +17,12 @@ public class BedDataBaseAccessService implements BedDao {
 
     final String sqlSelectAllBeds = "SELECT id, number, room_id, created_at, updated_at FROM bed";
     final String sqlSelectBedByID = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE id = ?";
-    final String sqlSelectBedByVariable = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE ";
-    final String sqlNumber = " (number = ?)";
-    final String sqlRoomId = " (room_id = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectBedByVariable = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE";
+    final String sqlNumber = "(number = ?)";
+    final String sqlRoomId = "(room_id = ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlInsertBed = "INSERT INTO bed VALUES(?, ?, ?, ?)";
     final String sqlDeleteBed = "DELETE FROM bed WHERE id = ?";
@@ -130,8 +130,8 @@ public class BedDataBaseAccessService implements BedDao {
     @Override
     public List<BedGetDTO> selectBedByVariables(Optional<Integer> number,
                                                 Optional<UUID> roomId,
-                                                Optional<LocalDateTime> updatedAt,
-                                                Optional<LocalDateTime> createdAt) throws SQLException {
+                                                Optional<LocalDateTime> createdAfter,
+                                                Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -143,28 +143,28 @@ public class BedDataBaseAccessService implements BedDao {
         }
         if(roomId.isPresent()) {
             i++;
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
             expressions.add(sqlRoomId);
-            if(i > 1) {
-                expressions.add(sqlAnd);
-            }
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAfter);
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAfter);
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];
@@ -176,12 +176,12 @@ public class BedDataBaseAccessService implements BedDao {
                 jdbcTable[k] = roomId.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
             return jdbcTemplate.query(

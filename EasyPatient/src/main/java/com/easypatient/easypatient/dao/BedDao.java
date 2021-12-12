@@ -25,6 +25,6 @@ public interface BedDao {
 
     List<BedGetDTO> selectBedByVariables(Optional<Integer> number,
                                          Optional<UUID> roomId,
-                                         Optional<LocalDateTime> updatedAt,
-                                         Optional<LocalDateTime> createdAt) throws SQLException;
+                                         Optional<LocalDateTime> updatedAfter,
+                                         Optional<LocalDateTime> createdAfter) throws SQLException;
 }

@@ -36,10 +36,10 @@ public class BedService {
     }
 
     public List<BedGetDTO> getBedByVariables(Optional<Integer> number,
-                                                 Optional<UUID> roomId,
-                                                 Optional<LocalDateTime> updatedAt,
-                                                 Optional<LocalDateTime> createdAt) throws SQLException {
-        return bedDao.selectBedByVariables(number, roomId, updatedAt, createdAt);
+                                             Optional<UUID> roomId,
+                                             Optional<LocalDateTime> createdAfter,
+                                             Optional<LocalDateTime> updatedAfter) throws SQLException {
+        return bedDao.selectBedByVariables(number, roomId, updatedAfter, createdAfter);
     }
 
     public void deleteBed(UUID id) {

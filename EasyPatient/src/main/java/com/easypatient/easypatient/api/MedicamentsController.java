@@ -4,6 +4,7 @@ import com.easypatient.easypatient.dto.MedicamentsDTO;
 import com.easypatient.easypatient.dto.MedicamentsGetDTO;
 import com.easypatient.easypatient.service.MedicamentsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,9 +44,13 @@ public class MedicamentsController {
     public List<MedicamentsGetDTO> getMedicamentsByVariables(@RequestParam(required = false) Optional<String> name,
                                                              @RequestParam(required = false) Optional<String> type,
                                                              @RequestParam(required = false) Optional<String> value,
-                                                             @RequestParam(required = false) Optional<LocalDateTime> createdAt,
-                                                             @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
-        return medicamentsService.getMedicamentsByVariables(name, type, value, createdAt, updatedAt);
+                                                             @RequestParam(required = false)
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                                         Optional<LocalDateTime> createdAfter,
+                                                             @RequestParam(required = false)
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                                         Optional<LocalDateTime> updatedAfter) throws SQLException {
+        return medicamentsService.getMedicamentsByVariables(name, type, value, createdAfter, updatedAfter);
     }
 
     @DeleteMapping(path = "{id}")

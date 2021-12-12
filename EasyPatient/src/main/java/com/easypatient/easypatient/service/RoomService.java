@@ -40,9 +40,9 @@ public class RoomService {
 
     public List<RoomGetDTO> getRoomByVariables(Optional<Integer> number,
                                                Optional<String> name,
-                                               Optional<LocalDateTime> createdAt,
-                                               Optional<LocalDateTime> updatedAt) throws SQLException {
-        return roomDao.selectRoomByVariables(number, name, createdAt, updatedAt);
+                                               Optional<LocalDateTime> createdAfter,
+                                               Optional<LocalDateTime> updatedAfter) throws SQLException {
+        return roomDao.selectRoomByVariables(number, name, createdAfter, updatedAfter);
     }
 
     public void deleteRoom(UUID id) {

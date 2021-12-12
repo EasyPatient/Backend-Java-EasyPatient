@@ -20,14 +20,14 @@ public interface PatientDao {
                            Optional<String> name,
                            Optional<Integer> age,
                            Optional<UUID> bedId,
-                           Optional<LocalDateTime> arrivedAt) throws SQLException;
+                           Optional<LocalDateTime> arrivedAfter) throws SQLException;
 
     Optional<PatientGetDTO> selectPatientById(UUID id);
 
     List<PatientGetDTO> selectPatientByVariables(Optional<String> name,
                                                      Optional<Integer> age,
                                                      Optional<UUID> bedId,
-                                                     Optional<LocalDateTime> arrivedAt,
-                                                     Optional<LocalDateTime> createdAt,
-                                                     Optional<LocalDateTime> updatedAt) throws SQLException;
+                                                     Optional<LocalDateTime> arrivedAfter,
+                                                     Optional<LocalDateTime> createdAfter,
+                                                     Optional<LocalDateTime> updatedAfter) throws SQLException;
 }

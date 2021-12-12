@@ -32,6 +32,6 @@ public interface StaffDao {
                                              Optional<String> phoneAreaCode,
                                              Optional<String> password,
                                              Optional<String> role,
-                                             Optional<LocalDateTime> createdAt,
-                                             Optional<LocalDateTime> updatedAt) throws SQLException;
+                                             Optional<LocalDateTime> createdAfter,
+                                             Optional<LocalDateTime> updatedAfter) throws SQLException;
 }

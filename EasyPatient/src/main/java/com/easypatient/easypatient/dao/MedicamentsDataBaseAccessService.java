@@ -22,13 +22,13 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
     final String sqlSelectMedicamentsByID = "SELECT id, name, type, value, created_at, updated_at FROM medicaments WHERE id = ?";
     final String sqlInsertMedicaments = "INSERT INTO medicaments VALUES(?, ?, ?, ?, ?)";
     final String sqlDeleteMedicaments = "DELETE FROM medicaments WHERE id = ?";
-    final String sqlSelectMedicamentsByVariable = "SELECT name, type, value, created_at, updated_at FROM medicaments WHERE ";
-    final String sqlName = " (name = ?)";
-    final String sqlType = " (type = ?)";
-    final String sqlValue = " (value = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectMedicamentsByVariable = "SELECT id, name, type, value, created_at, updated_at FROM medicaments WHERE";
+    final String sqlName = "(name = ?)";
+    final String sqlType = "(type = ?)";
+    final String sqlValue = "(value = ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlUpdateMedicamentsById = "UPDATE medicaments SET name = ?, type = ?, value = ?, updated_at = ? WHERE id = ?";
 
@@ -124,8 +124,8 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
     public List<MedicamentsGetDTO> selectMedicamentsByVariables(Optional<String> name,
                                                                 Optional<String> type,
                                                                 Optional<String> value,
-                                                                Optional<LocalDateTime> createdAt,
-                                                                Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                                Optional<LocalDateTime> createdAfter,
+                                                                Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -137,35 +137,35 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
         }
         if(type.isPresent()) {
             i++;
-            expressions.add(sqlType);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlType);
         }
         if(value.isPresent()) {
             i++;
+            if(i > 1) {
+                expressions.add(sqlAnd);
+            }
             expressions.add(sqlValue);
-            if(i > 1) {
-                expressions.add(sqlAnd);
-            }
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAfter);
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAfter);
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];
@@ -181,12 +181,12 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
                 jdbcTable[k] = value.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
             return jdbcTemplate.query(
