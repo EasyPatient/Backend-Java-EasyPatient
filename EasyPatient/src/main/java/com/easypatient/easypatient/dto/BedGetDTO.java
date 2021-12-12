@@ -15,7 +15,6 @@ import java.util.UUID;
 public class BedGetDTO {
     private final UUID id;
     private int number;
-    private UUID patientId;
     private UUID roomId;
     private LocalDateTime updatedAt;
     private final LocalDateTime createdAt;

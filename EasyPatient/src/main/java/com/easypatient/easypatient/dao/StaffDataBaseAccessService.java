@@ -20,16 +20,16 @@ public class StaffDataBaseAccessService implements StaffDao {
     final String sqlSelectAllStaff = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff";
     final String sqlSelectStaffByID = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff WHERE id = ?";
     final String sqlInsertStaff = "INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-    final String sqlSelectStaffByVariable = "SELECT name, email, phone, phoneAreaCode, password, role, createdAt, updatedAt FROM staff WHERE ";
-    final String sqlEmail = " (email = ?)";
-    final String sqlName = " (name = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlPhone = " (phone = ?)";
-    final String sqlPhoneAreaCode = " (phoneAreaCode = ?)";
-    final String sqlPassword = " (password = ?)";
-    final String sqlRole = " (role = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectStaffByVariable = "SELECT id, name, email, phone, phone_area_code, password, role, created_at, updated_at FROM staff WHERE";
+    final String sqlEmail = "(email = ?)";
+    final String sqlName = "(name = ?)";
+    final String sqlCreatedAt = "(created_at = ?)";
+    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlPhone = "(phone = ?)";
+    final String sqlPhoneAreaCode = "(phone_area_code = ?)";
+    final String sqlPassword = "(password = ?)";
+    final String sqlRole = "(role = ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlDeleteStaff = "DELETE FROM staff WHERE id = ?";
     final String sqlUpdateStaffById = "UPDATE staff SET name = ?, email = ?, phone = ?, phone_area_code = ?, password = ?, role = ?, updated_at = ? WHERE id = ?";
@@ -213,8 +213,8 @@ public class StaffDataBaseAccessService implements StaffDao {
             }
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(";");
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];

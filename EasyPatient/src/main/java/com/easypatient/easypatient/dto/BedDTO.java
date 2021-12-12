@@ -13,6 +13,5 @@ import java.util.UUID;
 @Builder
 public class BedDTO {
     private int number;
-    private UUID patientId;
     private UUID roomId;
 }

@@ -22,7 +22,11 @@ public class PatientService {
         this.patientDao = patientDao;
     }
 
-    public void addPatient(PatientDTO patient) {
+    public void addPatient(PatientDTO patient) throws SQLException {
+        int age = patient.getAge();
+        if (age < 0) {
+            throw new SQLException("Can not add patient with age less than 0.");
+        }
         patientDao.insertPatient(patient);
     }
 
@@ -52,6 +56,9 @@ public class PatientService {
                               Optional<Integer> age,
                               Optional<UUID> bedId,
                               Optional<LocalDateTime> arrivedAt) throws SQLException {
+        if (age.isPresent() && age.get() < 0) {
+            throw new SQLException("Can not add patient with age less than 0.");
+        }
         patientDao.updatePatientById(id, name, age, bedId, arrivedAt);
     }
 }

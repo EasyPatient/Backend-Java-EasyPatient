@@ -1,7 +1,6 @@
 package com.easypatient.easypatient.dao;
 
-import com.easypatient.easypatient.dto.PatientDTO;
-import com.easypatient.easypatient.dto.PatientGetDTO;
+import com.easypatient.easypatient.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,10 +32,12 @@ public class PatientDataBaseAccessService implements PatientDao {
     final String sqlUpdatePatientById = "UPDATE patient SET name = ?, age = ?, bed_id = ?, arrived_at = ?, updated_at = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
+    private final BedDataBaseAccessService bedDataBaseAccessService;
 
     @Autowired
-    public PatientDataBaseAccessService(JdbcTemplate jdbcTemplate) {
+    public PatientDataBaseAccessService(JdbcTemplate jdbcTemplate , BedDataBaseAccessService bedDataBaseAccessService) {
         this.jdbcTemplate = jdbcTemplate;
+        this.bedDataBaseAccessService = bedDataBaseAccessService;
     }
 
     private static PatientGetDTO mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -59,8 +60,18 @@ public class PatientDataBaseAccessService implements PatientDao {
     }
 
     @Override
-    public void insertPatient(PatientDTO patient) {
+    public void insertPatient(PatientDTO patient) throws SQLException {
         LocalDateTime date = LocalDateTime.now();
+
+        UUID bedId = patient.getBedId();
+
+        Optional<BedGetDTO> bedFromDB;
+
+        try {
+            bedFromDB = bedDataBaseAccessService.selectBedById(bedId);
+        } catch (Exception e) {
+            throw new SQLException("Bed id: " + bedId + "does not exist.");
+        }
 
         jdbcTemplate.update(sqlInsertPatient,
                 patient.getName(),

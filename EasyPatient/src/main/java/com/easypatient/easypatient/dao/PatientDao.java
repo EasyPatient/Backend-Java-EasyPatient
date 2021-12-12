@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PatientDao {
-    void insertPatient(PatientDTO patient);
+    void insertPatient(PatientDTO patient) throws SQLException;
 
     List<PatientGetDTO> selectAllPatients();
 
