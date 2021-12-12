@@ -18,14 +18,14 @@ public class PatientDataBaseAccessService implements PatientDao {
 
     final String sqlSelectAllPeople = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient";
     final String sqlSelectPatientByID = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE id = ?";
-    final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE ";
-    final String sqlName = " (name = ?)";
-    final String sqlAge = " (age = ?)";
-    final String sqlBed = " (bed_id = ?)";
-    final String sqlArrivedAt = " (arrived_at = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectPatientByVariable = "SELECT id, name, age, bed_id, arrived_at, created_at, updated_at FROM patient WHERE";
+    final String sqlName = "(name = ?)";
+    final String sqlAge = "(age = ?)";
+    final String sqlBed = "(bed_id = ?)";
+    final String sqlArrivedAt = "(arrived_at = ?)";
+    final String sqlCreatedAt = "(created_at = ?)";
+    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlInsertPatient = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?)";
     final String sqlDeletePatient = "DELETE FROM patient WHERE id = ?";
@@ -156,42 +156,42 @@ public class PatientDataBaseAccessService implements PatientDao {
         }
         if(age.isPresent()) {
             i++;
-            expressions.add(sqlAge);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlAge);
         }
         if(bedId.isPresent()) {
             i++;
-            expressions.add(sqlBed);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlBed);
         }
         if(arrivedAt.isPresent()) {
             i++;
-            expressions.add(sqlArrivedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlArrivedAt);
         }
         if(createdAt.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAt);
         }
         if(updatedAt.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAt);
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];

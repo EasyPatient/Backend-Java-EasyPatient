@@ -130,28 +130,28 @@ public class RoomDataBaseAccessService implements RoomDao {
         }
         if(name.isPresent()) {
             i++;
-            expressions.add(sqlName);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlName);
         }
         if(createdAt.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAt);
         }
         if(updatedAt.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAt);
         }
 
         String sqlExpression = String.join(" ", expressions);
-        sqlExpression = sqlExpression.concat(";");
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];

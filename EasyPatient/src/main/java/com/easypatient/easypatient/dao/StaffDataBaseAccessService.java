@@ -165,56 +165,56 @@ public class StaffDataBaseAccessService implements StaffDao {
         }
         if(email.isPresent()) {
             i++;
-            expressions.add(sqlEmail);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlEmail);
         }
         if(phone.isPresent()) {
             i++;
-            expressions.add(sqlPhone);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlPhone);
         }
         if(phoneAreaCode.isPresent()) {
             i++;
-            expressions.add(sqlPhoneAreaCode);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlPhoneAreaCode);
         }
         if(password.isPresent()) {
             i++;
-            expressions.add(sqlPassword);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlPassword);
         }
         if(role.isPresent()) {
             i++;
-            expressions.add(sqlRole);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlRole);
         }
         if(createdAt.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAt);
         }
         if(updatedAt.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAt);
         }
 
         String sqlExpression = String.join(" ", expressions);
-        sqlExpression = sqlExpression.concat(";");
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];

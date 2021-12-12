@@ -55,6 +55,12 @@ public class StaffPatientDataBaseAccessService implements StaffPatientDao{
         UUID patientId = staffPatient.getPatientId();
         UUID staffId = staffPatient.getStaffId();
 
+        if (selectStaffPatientByPatientId(patientId).stream()
+                .map(StaffPatientGetDTO::getStaffId)
+                .anyMatch(staff -> staff.equals(staffId))) {
+            throw new SQLException("Staff with id: " + staffId + "already assigned to patient with id: " + patientId + ".");
+        }
+
         Optional<PatientGetDTO> patientFromDB = patientDataBaseAccessService.selectPatientById(patientId);
         Optional<StaffGetDTO> staffFromDB = staffDataBaseAccessService.selectStaffById(staffId);
 
@@ -86,18 +92,27 @@ public class StaffPatientDataBaseAccessService implements StaffPatientDao{
 
     @Override
     public List<StaffPatientGetDTO> selectStaffPatientByPatientId(UUID patientId) throws SQLException {
-        return jdbcTemplate.query(
-                sqlSelectStaffPatientByPatientId,
-                new Object[]{patientId},
-                StaffPatientDataBaseAccessService::mapRow);
+        try {
+            return jdbcTemplate.query(
+                    sqlSelectStaffPatientByPatientId,
+                    new Object[]{patientId},
+                    StaffPatientDataBaseAccessService::mapRow);
+        } catch (Exception e) {
+            throw new SQLException("Cannot query with patient ID: " + patientId + ".");
+        }
+
     }
 
     @Override
     public List<StaffPatientGetDTO> selectStaffPatientByStaffId(UUID stafftId) throws SQLException {
-        return jdbcTemplate.query(
-                sqlSelectStaffPatientByStaffId,
-                new Object[]{stafftId},
-                StaffPatientDataBaseAccessService::mapRow);
+        try {
+            return jdbcTemplate.query(
+                    sqlSelectStaffPatientByStaffId,
+                    new Object[]{stafftId},
+                    StaffPatientDataBaseAccessService::mapRow);
+        } catch (Exception e) {
+            throw new SQLException("Cannot query with staff ID: " + stafftId + ".");
+        }
     }
 
 }

@@ -17,12 +17,12 @@ public class BedDataBaseAccessService implements BedDao {
 
     final String sqlSelectAllBeds = "SELECT id, number, room_id, created_at, updated_at FROM bed";
     final String sqlSelectBedByID = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE id = ?";
-    final String sqlSelectBedByVariable = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE ";
-    final String sqlNumber = " (number = ?)";
-    final String sqlRoomId = " (room_id = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectBedByVariable = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE";
+    final String sqlNumber = "(number = ?)";
+    final String sqlRoomId = "(room_id = ?)";
+    final String sqlCreatedAt = "(created_at = ?)";
+    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlInsertBed = "INSERT INTO bed VALUES(?, ?, ?, ?)";
     final String sqlDeleteBed = "DELETE FROM bed WHERE id = ?";
@@ -143,28 +143,28 @@ public class BedDataBaseAccessService implements BedDao {
         }
         if(roomId.isPresent()) {
             i++;
-            expressions.add(sqlRoomId);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlRoomId);
         }
         if(updatedAt.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAt);
         }
         if(createdAt.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAt);
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];

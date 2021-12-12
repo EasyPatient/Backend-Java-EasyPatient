@@ -32,12 +32,12 @@ public class StaffPatientController {
         return staffPatientService.getAllStaffPatient();
     }
 
-    @GetMapping(path = "{patientId}")
+    @GetMapping(path = "/patientId/{patientId}")
     public List<StaffPatientGetDTO> getStaffPatientByPatientId(@PathVariable UUID patientId) throws SQLException {
         return staffPatientService.getStaffPatientByPatientId(patientId);
     }
 
-    @GetMapping(path = "{staffId}")
+    @GetMapping(path = "/staffId/{staffId}")
     public List<StaffPatientGetDTO> getStaffPatientByStaffId(@PathVariable UUID staffId) throws SQLException {
         return staffPatientService.getStaffPatientByStaffId(staffId);
     }

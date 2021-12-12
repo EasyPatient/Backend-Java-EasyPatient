@@ -22,12 +22,12 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
     final String sqlSelectAllSmartband = "SELECT id, mac, name, created_at, updated_at FROM smartband";
     final String sqlSelectSmartbandByID = "SELECT id, mac, name, created_at, updated_at FROM smartband WHERE id = ?";
     final String sqlInsertSmartband = "INSERT INTO smartband VALUES(?, ?, ?, ?)";
-    final String sqlSelectSmartbandByVariable = "SELECT mac, name, created_at, updated_at FROM smartband WHERE ";
-    final String sqlMac = " (mac = ?)";
-    final String sqlName = " (name = ?)";
-    final String sqlCreatedAt = " (created_at = ?)";
-    final String sqlUpdatedAt = " (updated_at = ?)";
-    final String sqlAnd = " AND ";
+    final String sqlSelectSmartbandByVariable = "SELECT id, mac, name, created_at, updated_at FROM smartband WHERE";
+    final String sqlMac = "(mac = ?)";
+    final String sqlName = "(name = ?)";
+    final String sqlCreatedAt = "(created_at = ?)";
+    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlDeleteSmartband = "DELETE FROM smartband WHERE id = ?";
     final String sqlUpdateSmartbandById = "UPDATE smartband SET mac = ?, name = ?, updated_at = ? WHERE id = ?";
@@ -129,28 +129,28 @@ public class SmartbandDataBaseAccessService implements SmartbandDao {
         }
         if(name.isPresent()) {
             i++;
-            expressions.add(sqlName);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlName);
         }
         if(createdAt.isPresent()) {
             i++;
-            expressions.add(sqlCreatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlCreatedAt);
         }
         if(updatedAt.isPresent()) {
             i++;
-            expressions.add(sqlUpdatedAt);
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
+            expressions.add(sqlUpdatedAt);
         }
 
-        expressions.add(sqlSemicolon);
         String sqlExpression = String.join(" ", expressions);
+        sqlExpression = sqlExpression.concat(sqlSemicolon);
 
         if(i != 0) {
             Object[] jdbcTable = new Object[i];
