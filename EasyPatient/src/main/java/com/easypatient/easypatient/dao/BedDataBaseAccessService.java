@@ -26,7 +26,7 @@ public class BedDataBaseAccessService implements BedDao {
     final String sqlSemicolon = ";";
     final String sqlInsertBed = "INSERT INTO bed VALUES(?, ?, ?, ?)";
     final String sqlDeleteBed = "DELETE FROM bed WHERE id = ?";
-    final String sqlUpdateBedById = "UPDATE  bed SET number = ?,roomId = ? WHERE id = ?";
+    final String sqlUpdateBedById = "UPDATE bed SET number = ?, room_id = ?, updated_at = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final RoomDataBaseAccessService roomDataBaseAccessService;
