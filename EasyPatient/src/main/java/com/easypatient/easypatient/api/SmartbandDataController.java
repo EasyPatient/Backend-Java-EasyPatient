@@ -5,6 +5,7 @@ import com.easypatient.easypatient.dto.SmartbandDataDTO;
 import com.easypatient.easypatient.dto.SmartbandDataGetDTO;
 import com.easypatient.easypatient.service.SmartbandDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,16 +58,20 @@ public class SmartbandDataController {
                                                       @RequestParam(required = false) Optional<String> oxygen,
                                                       @RequestParam(required = false) Optional<String> temperature,
                                                       @RequestParam(required = false) Optional<String> battery,
-                                                      @RequestParam(required = false) Optional<LocalDateTime> createdAt,
-                                                      @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                                 @RequestParam(required = false)
+                                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                                             Optional<LocalDateTime> createdAfter,
+                                                                 @RequestParam(required = false)
+                                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                                             Optional<LocalDateTime> updatedAfter) throws SQLException {
         return smartbandDataService.getSmartbandDataByVariables(smartbandId,
                 patientId,
                 heartRate,
                 oxygen,
                 temperature,
                 battery,
-                createdAt,
-                updatedAt);
+                createdAfter,
+                updatedAfter);
     }
 
 

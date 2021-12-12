@@ -40,9 +40,9 @@ public class StaffService {
                                                  Optional<String> phoneAreaCode,
                                                  Optional<String> password,
                                                  Optional<String> role,
-                                                 Optional<LocalDateTime> createdAt,
-                                                 Optional<LocalDateTime> updatedAt) throws SQLException {
-        return staffDao.selectStaffByVariables(name, email, phone, phoneAreaCode, password, role, createdAt, updatedAt);
+                                                 Optional<LocalDateTime> createdAfter,
+                                                 Optional<LocalDateTime> updatedAfter) throws SQLException {
+        return staffDao.selectStaffByVariables(name, email, phone, phoneAreaCode, password, role, createdAfter, updatedAfter);
     }
 
     public void deleteStaff(UUID id) {

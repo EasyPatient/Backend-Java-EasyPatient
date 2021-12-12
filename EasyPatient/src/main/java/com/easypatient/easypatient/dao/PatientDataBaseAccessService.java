@@ -22,9 +22,9 @@ public class PatientDataBaseAccessService implements PatientDao {
     final String sqlName = "(name = ?)";
     final String sqlAge = "(age = ?)";
     final String sqlBed = "(bed_id = ?)";
-    final String sqlArrivedAt = "(arrived_at = ?)";
-    final String sqlCreatedAt = "(created_at = ?)";
-    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlArrivedAfter = "(arrived_at >= ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
     final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlInsertPatient = "INSERT INTO patient VALUES(?, ?, ?, ?, ?, ?)";
@@ -142,9 +142,9 @@ public class PatientDataBaseAccessService implements PatientDao {
     public List<PatientGetDTO> selectPatientByVariables(Optional<String> name,
                                                         Optional<Integer> age,
                                                         Optional<UUID> bedId,
-                                                        Optional<LocalDateTime> arrivedAt,
-                                                        Optional<LocalDateTime> createdAt,
-                                                        Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                        Optional<LocalDateTime> arrivedAfter,
+                                                        Optional<LocalDateTime> createdAfter,
+                                                        Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -168,26 +168,26 @@ public class PatientDataBaseAccessService implements PatientDao {
             }
             expressions.add(sqlBed);
         }
-        if(arrivedAt.isPresent()) {
+        if(arrivedAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlArrivedAt);
+            expressions.add(sqlArrivedAfter);
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlCreatedAt);
+            expressions.add(sqlCreatedAfter);
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlUpdatedAt);
+            expressions.add(sqlUpdatedAfter);
         }
 
         String sqlExpression = String.join(" ", expressions);
@@ -207,16 +207,16 @@ public class PatientDataBaseAccessService implements PatientDao {
                 jdbcTable[k] = bedId.get();
                 k++;
             }
-            if(arrivedAt.isPresent()) {
-                jdbcTable[k] = arrivedAt.get();
+            if(arrivedAfter.isPresent()) {
+                jdbcTable[k] = arrivedAfter.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
             return jdbcTemplate.query(

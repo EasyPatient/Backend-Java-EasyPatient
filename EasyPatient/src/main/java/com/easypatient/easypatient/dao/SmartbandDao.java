@@ -24,6 +24,6 @@ public interface SmartbandDao {
 
     List<SmartbandGetDTO> selectSmartbandByVariables(Optional<String> mac,
                                                      Optional<String> name,
-                                                     Optional<LocalDateTime> createdAt,
-                                                     Optional<LocalDateTime> updatedAt) throws SQLException;
+                                                     Optional<LocalDateTime> createdAfter,
+                                                     Optional<LocalDateTime> updatedAfter) throws SQLException;
 }

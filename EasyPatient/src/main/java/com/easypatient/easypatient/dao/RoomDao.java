@@ -24,6 +24,6 @@ public interface RoomDao {
 
     List<RoomGetDTO> selectRoomByVariables(Optional<Integer> number,
                                            Optional<String> name,
-                                           Optional<LocalDateTime> createdAt,
-                                           Optional<LocalDateTime> updatedAt) throws SQLException;
+                                           Optional<LocalDateTime> createdAfter,
+                                           Optional<LocalDateTime> updatedAfter) throws SQLException;
 }

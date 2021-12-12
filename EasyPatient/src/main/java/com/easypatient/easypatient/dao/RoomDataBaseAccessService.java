@@ -24,8 +24,8 @@ public class RoomDataBaseAccessService implements RoomDao {
     final String sqlSelectRoomByVariable = "SELECT id, number, name, created_at, updated_at FROM room WHERE";
     final String sqlNumber = "(number = ?)";
     final String sqlName = "(name = ?)";
-    final String sqlCreatedAt = "(created_at = ?)";
-    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
     final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlDeleteRoom = "DELETE FROM room WHERE id = ?";
@@ -117,8 +117,8 @@ public class RoomDataBaseAccessService implements RoomDao {
     @Override
     public List<RoomGetDTO> selectRoomByVariables(Optional<Integer> number,
                                                   Optional<String> name,
-                                                  Optional<LocalDateTime> createdAt,
-                                                  Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                  Optional<LocalDateTime> createdAfter,
+                                                  Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -135,19 +135,19 @@ public class RoomDataBaseAccessService implements RoomDao {
             }
             expressions.add(sqlName);
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlCreatedAt);
+            expressions.add(sqlCreatedAfter);
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlUpdatedAt);
+            expressions.add(sqlUpdatedAfter);
         }
 
         String sqlExpression = String.join(" ", expressions);
@@ -163,12 +163,12 @@ public class RoomDataBaseAccessService implements RoomDao {
                 jdbcTable[k] = name.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
             return jdbcTemplate.query(

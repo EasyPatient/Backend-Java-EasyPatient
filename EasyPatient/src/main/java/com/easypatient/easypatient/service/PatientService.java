@@ -39,12 +39,12 @@ public class PatientService {
     }
 
     public List<PatientGetDTO> getPatientByVariables(Optional<String> name,
-                                                         Optional<Integer> age,
-                                                         Optional<UUID> bedId,
-                                                         Optional<LocalDateTime> arrivedAt,
-                                                         Optional<LocalDateTime> createdAt,
-                                                         Optional<LocalDateTime> updatedAt) throws SQLException {
-        return patientDao.selectPatientByVariables(name, age, bedId, arrivedAt, createdAt, updatedAt);
+                                                     Optional<Integer> age,
+                                                     Optional<UUID> bedId,
+                                                     Optional<LocalDateTime> arrivedAfter,
+                                                     Optional<LocalDateTime> createdAfter,
+                                                     Optional<LocalDateTime> updatedAfter) throws SQLException {
+        return patientDao.selectPatientByVariables(name, age, bedId, arrivedAfter, createdAfter, updatedAfter);
     }
 
     public void deletePatient(UUID id) {

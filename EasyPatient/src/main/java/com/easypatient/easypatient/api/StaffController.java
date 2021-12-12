@@ -3,7 +3,9 @@ package com.easypatient.easypatient.api;
 import com.easypatient.easypatient.dto.StaffDTO;
 import com.easypatient.easypatient.dto.StaffGetDTO;
 import com.easypatient.easypatient.service.StaffService;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,16 +49,20 @@ public class StaffController {
                                                  @RequestParam(required = false) Optional<String> phoneAreaCode,
                                                  @RequestParam(required = false) Optional<String> password,
                                                  @RequestParam(required = false) Optional<String> role,
-                                                 @RequestParam(required = false) Optional<LocalDateTime> createdAt,
-                                                 @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                 @RequestParam(required = false)
+                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                             Optional<LocalDateTime> createdAfter,
+                                                 @RequestParam(required = false)
+                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                             Optional<LocalDateTime> updatedAfter) throws SQLException {
         return staffService.getStaffByVariables(name,
                 email,
                 phone,
                 phoneAreaCode,
                 password,
                 role,
-                createdAt,
-                updatedAt);
+                createdAfter,
+                updatedAfter);
     }
 
     @DeleteMapping(path = "{id}")

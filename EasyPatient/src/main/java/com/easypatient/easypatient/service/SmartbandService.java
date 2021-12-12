@@ -36,9 +36,9 @@ public class SmartbandService {
 
     public List<SmartbandGetDTO> getSmartbandByVariables(Optional<String> mac,
                                                          Optional<String> name,
-                                                         Optional<LocalDateTime> createdAt,
-                                                         Optional<LocalDateTime> updatedAt) throws SQLException {
-        return smartbandDao.selectSmartbandByVariables(mac, name, createdAt, updatedAt);
+                                                         Optional<LocalDateTime> createdAfter,
+                                                         Optional<LocalDateTime> updatedAfter) throws SQLException {
+        return smartbandDao.selectSmartbandByVariables(mac, name, createdAfter, updatedAfter);
     }
 
     public void deleteSmartband(UUID id) {

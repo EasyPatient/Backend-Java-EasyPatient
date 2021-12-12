@@ -20,8 +20,8 @@ public class BedDataBaseAccessService implements BedDao {
     final String sqlSelectBedByVariable = "SELECT id, number, room_id, created_at, updated_at FROM bed WHERE";
     final String sqlNumber = "(number = ?)";
     final String sqlRoomId = "(room_id = ?)";
-    final String sqlCreatedAt = "(created_at = ?)";
-    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
     final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlInsertBed = "INSERT INTO bed VALUES(?, ?, ?, ?)";
@@ -130,8 +130,8 @@ public class BedDataBaseAccessService implements BedDao {
     @Override
     public List<BedGetDTO> selectBedByVariables(Optional<Integer> number,
                                                 Optional<UUID> roomId,
-                                                Optional<LocalDateTime> updatedAt,
-                                                Optional<LocalDateTime> createdAt) throws SQLException {
+                                                Optional<LocalDateTime> createdAfter,
+                                                Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -148,19 +148,19 @@ public class BedDataBaseAccessService implements BedDao {
             }
             expressions.add(sqlRoomId);
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlUpdatedAt);
+            expressions.add(sqlUpdatedAfter);
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlCreatedAt);
+            expressions.add(sqlCreatedAfter);
         }
 
         String sqlExpression = String.join(" ", expressions);
@@ -176,12 +176,12 @@ public class BedDataBaseAccessService implements BedDao {
                 jdbcTable[k] = roomId.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
             return jdbcTemplate.query(

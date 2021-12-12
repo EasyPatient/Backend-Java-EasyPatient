@@ -4,6 +4,7 @@ import com.easypatient.easypatient.dto.BedDTO;
 import com.easypatient.easypatient.dto.BedGetDTO;
 import com.easypatient.easypatient.service.BedService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,14 +56,17 @@ public class BedController {
 
     @GetMapping(path = "/getByVariables")
     public List<BedGetDTO> getBedByVariables(@RequestParam(required = false) Optional<Integer> number,
-                                                      @RequestParam(required = false) Optional<UUID> patientId,
-                                                      @RequestParam(required = false) Optional<UUID> roomId,
-                                                      @RequestParam(required = false) Optional<LocalDateTime> updatedAt,
-                                                      @RequestParam(required = false) Optional<LocalDateTime> createdAt) throws SQLException {
+                                             @RequestParam(required = false) Optional<UUID> roomId,
+                                             @RequestParam(required = false)
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                         Optional<LocalDateTime> updatedAfter,
+                                             @RequestParam(required = false)
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                         Optional<LocalDateTime> createdAfter) throws SQLException {
         return bedService.getBedByVariables(number,
                 roomId,
-                createdAt,
-                updatedAt);
+                createdAfter,
+                updatedAfter);
     }
 
 }

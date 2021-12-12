@@ -26,8 +26,8 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
     final String sqlName = "(name = ?)";
     final String sqlType = "(type = ?)";
     final String sqlValue = "(value = ?)";
-    final String sqlCreatedAt = "(created_at = ?)";
-    final String sqlUpdatedAt = "(updated_at = ?)";
+    final String sqlCreatedAfter = "(created_at >= ?)";
+    final String sqlUpdatedAfter = "(updated_at >= ?)";
     final String sqlAnd = "AND";
     final String sqlSemicolon = ";";
     final String sqlUpdateMedicamentsById = "UPDATE medicaments SET name = ?, type = ?, value = ?, updated_at = ? WHERE id = ?";
@@ -124,8 +124,8 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
     public List<MedicamentsGetDTO> selectMedicamentsByVariables(Optional<String> name,
                                                                 Optional<String> type,
                                                                 Optional<String> value,
-                                                                Optional<LocalDateTime> createdAt,
-                                                                Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                                Optional<LocalDateTime> createdAfter,
+                                                                Optional<LocalDateTime> updatedAfter) throws SQLException {
         int i = 0;
         int k = 0;
 
@@ -149,19 +149,19 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
             }
             expressions.add(sqlValue);
         }
-        if(createdAt.isPresent()) {
+        if(createdAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlCreatedAt);
+            expressions.add(sqlCreatedAfter);
         }
-        if(updatedAt.isPresent()) {
+        if(updatedAfter.isPresent()) {
             i++;
             if(i > 1) {
                 expressions.add(sqlAnd);
             }
-            expressions.add(sqlUpdatedAt);
+            expressions.add(sqlUpdatedAfter);
         }
 
         String sqlExpression = String.join(" ", expressions);
@@ -181,12 +181,12 @@ public class MedicamentsDataBaseAccessService implements MedicamentsDao{
                 jdbcTable[k] = value.get();
                 k++;
             }
-            if(createdAt.isPresent()) {
-                jdbcTable[k] = createdAt.get();
+            if(createdAfter.isPresent()) {
+                jdbcTable[k] = createdAfter.get();
                 k++;
             }
-            if(updatedAt.isPresent()) {
-                jdbcTable[k] = updatedAt.get();
+            if(updatedAfter.isPresent()) {
+                jdbcTable[k] = updatedAfter.get();
                 k++;
             }
             return jdbcTemplate.query(

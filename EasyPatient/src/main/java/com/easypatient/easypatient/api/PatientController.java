@@ -4,6 +4,7 @@ import com.easypatient.easypatient.dto.PatientDTO;
 import com.easypatient.easypatient.dto.PatientGetDTO;
 import com.easypatient.easypatient.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,15 +45,21 @@ public class PatientController {
     public List<PatientGetDTO> getPatientsByVariables(@RequestParam(required = false) Optional<String> name,
                                                       @RequestParam(required = false) Optional<Integer> age,
                                                       @RequestParam(required = false) Optional<UUID> bedId,
-                                                      @RequestParam(required = false) Optional<LocalDateTime> arrivedAt,
-                                                      @RequestParam(required = false) Optional<LocalDateTime> createdAt,
-                                                      @RequestParam(required = false) Optional<LocalDateTime> updatedAt) throws SQLException {
+                                                      @RequestParam(required = false)
+                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                                  Optional<LocalDateTime> arrivedAfter,
+                                                      @RequestParam(required = false)
+                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                                  Optional<LocalDateTime> createdAfter,
+                                                      @RequestParam(required = false)
+                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                                                  Optional<LocalDateTime> updatedAfter) throws SQLException {
         return patientService.getPatientByVariables(name,
                 age,
                 bedId,
-                arrivedAt,
-                createdAt,
-                updatedAt);
+                arrivedAfter,
+                createdAfter,
+                updatedAfter);
     }
 
     @DeleteMapping(path = "{id}")
@@ -65,7 +72,9 @@ public class PatientController {
                                   @RequestParam(required = false) Optional<String> name,
                                   @RequestParam(required = false) Optional<Integer> age,
                                   @RequestParam(required = false) Optional<UUID> bedId,
-                                  @RequestParam(required = false) Optional<LocalDateTime> arrivedAt) throws SQLException {
+                                  @RequestParam(required = false)
+                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, fallbackPatterns = { "yyyy-MM-dd'T'HH:mm" })
+                                              Optional<LocalDateTime> arrivedAt) throws SQLException {
         patientService.updatePatient(id, name, age, bedId, arrivedAt);
     }
 }
