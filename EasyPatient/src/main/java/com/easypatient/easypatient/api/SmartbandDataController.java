@@ -36,12 +36,12 @@ public class SmartbandDataController {
         return smartbandDataService.getAllSmartbandData();
     }
 
-    @GetMapping(path = "{smartbandId}")
+    @GetMapping(path = "/smartbandId/{smartbandId}")
     public List<SmartbandDataGetDTO> getSmartbandDataBySmartbandId(@PathVariable("smartbandId") UUID smartbandId) throws SQLException {
         return smartbandDataService.getSmartbandDataBySmartbandId(smartbandId);
     }
 
-    @GetMapping(path = "{patientId}")
+    @GetMapping(path = "/patientId/{patientId}")
     public List<SmartbandDataGetDTO> getSmartbandDataByPatientId(@PathVariable("patientId") UUID patientId) throws SQLException {
         return smartbandDataService.getSmartbandDataByPatientId(patientId);
     }
